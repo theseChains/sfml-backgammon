@@ -3,16 +3,22 @@
 
 #include <array>
 
-#include "Chip.hpp"
+#include "Player.hpp"
+#include "ResourceHolder.hpp"
+#include "ResourceIdentifiers.hpp"
 
 class Board
 {
 public:
-    Board() = default;
+    Board(const TextureHolder& textures);
+
+    void draw(sf::RenderWindow& window);
 
 private:
-    std::array<Chip, 15> m_firstPlayerChips{};
-    std::array<Chip, 15> m_secondPlayerChips{};
+    Player m_firstPlayer;
+    Player m_secondPlayer;
+
+    void drawPlayerChips(const Player& player, sf::RenderWindow& window);
 };
 
 #endif
