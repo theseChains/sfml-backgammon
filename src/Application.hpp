@@ -3,6 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Board.hpp"
+#include "ResourceHolder.hpp"
+
 class Application
 {
 public:
@@ -11,7 +14,9 @@ public:
     void run();
 
 private:
-    sf::RenderWindow m_window{};
+    sf::RenderWindow m_window;
+    TextureHolder m_textures;
+    Board m_board;
 
     void processInput();
     void draw();

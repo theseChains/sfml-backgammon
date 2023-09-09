@@ -3,8 +3,12 @@
 #include "Constants.hpp"
 
 Application::Application()
-    : m_window{ sf::VideoMode{ constants::windowWidth, constants::windowHeight }, "backgammon" }
-{}
+    : m_window{ sf::VideoMode{ constants::windowWidth, constants::windowHeight }, "backgammon" },
+      m_board{ m_textures }
+{
+    // todo: initialize textures and fonts
+    // also todo: states for menu and game states
+}
 
 void Application::run()
 {
@@ -31,14 +35,6 @@ void Application::processInput()
 void Application::draw()
 {
     m_window.clear();
-
-    for (int i{ 0 }; i < 15; ++i)
-    {
-        sf::CircleShape circle{ constants::chipRadius };
-        circle.setPosition(0.0f, 50.0f * static_cast<float>(i));
-        circle.setFillColor(sf::Color::Cyan);
-        m_window.draw(circle);
-    }
-
+    m_board.draw(m_window);
     m_window.display();
 }
