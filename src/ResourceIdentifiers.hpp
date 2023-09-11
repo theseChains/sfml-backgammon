@@ -24,6 +24,6 @@ template <typename Resource, typename Identifier>
 class ResourceHolder;
 
 using TextureHolder = ResourceHolder<sf::Texture, Textures::ID>;
-using FontHolder = ResourceHolder<sf::Font, Textures::ID>;
+using FontHolder = ResourceHolder<sf::Font, Fonts::ID>;
 
 #endif

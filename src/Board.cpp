@@ -4,17 +4,57 @@
 #include "ChipColor.hpp"
 #include "Constants.hpp"
 
-Board::Board(const TextureHolder& textures)
-    : m_firstPlayer{ ChipColor::white, textures },
-      m_secondPlayer{ ChipColor::black, textures }
+#include <iostream>
+
+Board::Board(const FontHolder& fonts, const TextureHolder& textures, sf::RenderWindow& window)
+    : m_window{ window },
+      m_firstPlayerButton{},
+      m_secondPlayerButton{},
+      m_firstPlayer{ ChipColor::white, textures },
+      m_secondPlayer{ ChipColor::black, textures },
+      m_playerTurn{ PlayerTurn::firstPlayerTurn },
+      m_moveState{ false }
 {
+    ButtonTextInfo textInfo{ fonts.get(Fonts::ID::main), 10, "text", { 40.0f, 40.0f }, sf::Color::Magenta };
+    ButtonInfo info{ { 30.0f, 30.0f }, { 100.0f, 100.0f }, sf::Color::Cyan, textInfo };
+    m_firstPlayerButton = Button{ info };
 }
 
-void Board::draw(sf::RenderWindow& window)
+void Board::handleButtonClick(const sf::Event& event, Button& button)
+{
+    if (button.isClicked(event, m_window))
+    {
+        std::cout << "clicked!";
+        // std::pair<int, int> dicePoints{ throwDice() };
+        m_moveState = true;
+    }
+}
+
+void handleChipMove()
+{
+
+}
+
+void Board::handleEvent(const sf::Event& event)
+{
+    if (event.type != sf::Event::MouseButtonPressed)
+        return;
+
+    if (m_playerTurn == PlayerTurn::firstPlayerTurn && !m_moveState)
+        handleButtonClick(event, m_firstPlayerButton);
+    else if (m_playerTurn == PlayerTurn::secondPlayerTurn && !m_moveState)
+        handleButtonClick(event, m_secondPlayerButton);
+    else
+        handleChipMove();
+}
+
+void Board::draw()
 {
     // m_boardDrawer.drawBoard(stuff);
-    drawPlayerChips(m_firstPlayer, window);
-    drawPlayerChips(m_secondPlayer, window);
+    // m_firstPlayerButton.draw();
+    m_firstPlayerButton.draw(m_window);
+    drawPlayerChips(m_firstPlayer, m_window);
+    drawPlayerChips(m_secondPlayer, m_window);
 }
 
 void Board::drawPlayerChips(const Player& player, sf::RenderWindow& window)

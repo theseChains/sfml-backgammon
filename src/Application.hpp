@@ -16,6 +16,7 @@ public:
 private:
     sf::RenderWindow m_window;
     TextureHolder m_textures;
+    FontHolder m_fonts;
     Board m_board;
 
     void processInput();

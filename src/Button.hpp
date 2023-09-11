@@ -8,6 +8,7 @@
 class Button
 {
 public:
+   Button() = default;
    Button(const ButtonInfo& buttonInfo);
    bool isClicked(const sf::Event& event, sf::RenderWindow& window);
    void draw(sf::RenderWindow& window) const;

@@ -4,8 +4,9 @@
 
 Application::Application()
     : m_window{ sf::VideoMode{ constants::windowWidth, constants::windowHeight }, "backgammon" },
-      m_board{ m_textures }
+      m_board{ m_fonts, m_textures, m_window }
 {
+    // m_fonts.load(Fonts::ID::main, "../res/Hearty.otf");
     // todo: initialize textures and fonts
     // also todo: states for menu and game states
 }
@@ -35,6 +36,6 @@ void Application::processInput()
 void Application::draw()
 {
     m_window.clear();
-    m_board.draw(m_window);
+    // m_board.draw();
     m_window.display();
 }

@@ -1,5 +1,7 @@
 #include "Button.hpp"
 
+#include <iostream>
+
 Button::Button(const ButtonInfo& buttonInfo)
 {
   //button
@@ -16,6 +18,7 @@ Button::Button(const ButtonInfo& buttonInfo)
 
 bool Button::isClicked(const sf::Event& event, sf::RenderWindow& window)
 {
+  std::cout << "!\n";
   sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
   float start_x = m_buttonInfo.position.x;
   float end_x = m_buttonInfo.position.x * m_buttonInfo.size.x;
@@ -25,6 +28,7 @@ bool Button::isClicked(const sf::Event& event, sf::RenderWindow& window)
       event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) 
   {
     //m_buttonInfo.color.b += 50;
+    std::cout << "clicked!\n";
     return true;
   }
   return false;
