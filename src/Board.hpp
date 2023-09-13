@@ -12,8 +12,9 @@
 class Board
 {
 public:
-    Board(const FontHolder& fonts, const TextureHolder& textures, sf::RenderWindow& window);
+    Board(sf::Font& font, const TextureHolder& textures, sf::RenderWindow& window);
 
+    void initializeButtons(const sf::Font& font);
     void handleButtonClick(const sf::Event& event, Button& button);
     void handleEvent(const sf::Event& event);
     void draw();
