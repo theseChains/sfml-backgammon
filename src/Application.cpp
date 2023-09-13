@@ -2,8 +2,16 @@
 
 #include "Constants.hpp"
 
+FontHolder initializeFonts()
+{
+    FontHolder fonts{};
+    fonts.load(Fonts::ID::main, "../res/Hearty.otf");
+    return fonts;
+}
+
 Application::Application()
     : m_window{ sf::VideoMode{ constants::windowWidth, constants::windowHeight }, "backgammon" },
+      m_fonts{ initializeFonts() },
       m_board{ m_fonts, m_textures, m_window }
 {
     // m_fonts.load(Fonts::ID::main, "../res/Hearty.otf");
@@ -36,6 +44,6 @@ void Application::processInput()
 void Application::draw()
 {
     m_window.clear();
-    // m_board.draw();
+    m_board.draw();
     m_window.display();
 }

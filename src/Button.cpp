@@ -3,9 +3,13 @@
 #include <iostream>
 
 Button::Button(const ButtonInfo& buttonInfo)
+  : m_rectangle{},
+    m_text{}
 {
   //button
   m_rectangle.setSize(buttonInfo.size);
+  std::cout << "x: " << m_rectangle.getSize().x << '\n';
+  std::cout << "y: " << m_rectangle.getSize().y << '\n';
   m_rectangle.setFillColor(buttonInfo.color);
   m_rectangle.setPosition(buttonInfo.position);
   //text
@@ -14,6 +18,7 @@ Button::Button(const ButtonInfo& buttonInfo)
   m_text.setCharacterSize(buttonInfo.buttonTextInfo.characterSize);
   m_text.setFillColor(buttonInfo.buttonTextInfo.color);
   m_text.setPosition(buttonInfo.buttonTextInfo.position);
+  std::cout << "constructed button\n";
 }
 
 bool Button::isClicked(const sf::Event& event, sf::RenderWindow& window)
@@ -27,7 +32,7 @@ bool Button::isClicked(const sf::Event& event, sf::RenderWindow& window)
   if (start_x <= mousePosition.x <= end_x && start_y <= mousePosition.y <= end_y &&
       event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) 
   {
-    //m_buttonInfo.color.b += 50;
+    // m_buttonInfo.color.b += 50;
     std::cout << "clicked!\n";
     return true;
   }
@@ -37,6 +42,6 @@ bool Button::isClicked(const sf::Event& event, sf::RenderWindow& window)
  void Button::draw(sf::RenderWindow& window) const
  {
    window.draw(m_rectangle);
-   window.draw(m_text);
+   // window.draw(m_text);
  }
 
