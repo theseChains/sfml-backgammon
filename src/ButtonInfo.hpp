@@ -7,7 +7,7 @@
 
 struct ButtonTextInfo
 {
-    int characterSize;
+    unsigned int characterSize;
     std::string text;
     sf::Vector2f position;
     sf::Color color;

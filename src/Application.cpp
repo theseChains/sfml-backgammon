@@ -11,8 +11,17 @@ FontHolder initializeFonts()
     return fonts;
 }
 
+TextureHolder initializeTextures()
+{
+    TextureHolder textures{};
+    textures.load(Textures::ID::whiteChip, "../res/whiteChip.png");
+    textures.load(Textures::ID::board, "../res/board.png");
+    return textures;
+}
+
 Application::Application()
     : m_window{ sf::VideoMode{ constants::windowWidth, constants::windowHeight }, "backgammon" },
+      m_textures{ initializeTextures() },
       m_fonts{ initializeFonts() },
       m_board{ m_fonts.get(Fonts::ID::main), m_textures, m_window }
 {
@@ -39,6 +48,8 @@ void Application::processInput()
 
         if (event.type == sf::Event::Closed)
             m_window.close();
+
+        m_board.handleEvent(event);
     }
 }
 

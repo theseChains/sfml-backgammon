@@ -8,7 +8,8 @@ namespace Textures
     enum class ID
     {
         whiteChip,
-        blackChip
+        blackChip,
+        board
     };
 }
 

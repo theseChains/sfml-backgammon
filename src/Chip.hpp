@@ -18,8 +18,7 @@ public:
 private:
     sf::Vector2f m_position;
     ChipColor m_color;
-    sf::CircleShape m_chipCircle;
-    sf::Texture m_texture;
+    sf::Sprite m_chipCircle;
 };
 
 #endif

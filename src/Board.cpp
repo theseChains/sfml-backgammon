@@ -20,6 +20,7 @@ Board::Board(sf::Font& font, const TextureHolder& textures, sf::RenderWindow& wi
       m_firstPlayerButton{ initializePlayerButton(font) },
       m_firstPlayer{ ChipColor::white, textures },
       m_secondPlayer{ ChipColor::black, textures },
+      m_sprite{ textures.get(Textures::ID::board) },
       m_playerTurn{ PlayerTurn::firstPlayerTurn },
       m_moveState{ false }
 {
@@ -31,7 +32,7 @@ void Board::handleButtonClick(const sf::Event& event, Button& button)
     {
         std::cout << "clicked!";
         // std::pair<int, int> dicePoints{ throwDice() };
-        // m_moveState = true;
+        m_moveState = true;
     }
 }
 
@@ -57,7 +58,8 @@ void Board::draw()
 {
     // m_boardDrawer.drawBoard(stuff);
     m_firstPlayerButton.draw(m_window);
-    // drawPlayerChips(m_firstPlayer, m_window);
+    m_window.draw(m_sprite);
+    drawPlayerChips(m_firstPlayer, m_window);
     // drawPlayerChips(m_secondPlayer, m_window);
 }
 

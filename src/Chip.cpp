@@ -1,6 +1,7 @@
 #include "Chip.hpp"
 
 #include "Constants.hpp"
+#include <iostream>
 
 Textures::ID toTextureID(ChipColor color)
 {
@@ -9,7 +10,8 @@ Textures::ID toTextureID(ChipColor color)
         case ChipColor::white:
             return Textures::ID::whiteChip;
         case ChipColor::black:
-            return Textures::ID::blackChip;
+            // todo: change to black
+            return Textures::ID::whiteChip;
         default:
             return Textures::ID{};
     }
@@ -18,12 +20,11 @@ Textures::ID toTextureID(ChipColor color)
 Chip::Chip(const sf::Vector2f& position, ChipColor color, const TextureHolder& textures)
     : m_position{ position },
       m_color{ color },
-      m_chipCircle{},
-      m_texture{}
+      m_chipCircle{}
 {
     m_chipCircle.setPosition(position);
-    m_chipCircle.setRadius(constants::chipRadius);
-    // m_chipCircle.setTexture(&m_texture);
+    // m_chipCircle.setRadius(constants::chipRadius);
+    m_chipCircle.setTexture(textures.get(toTextureID(m_color)));
 }
 
 void Chip::draw(sf::RenderWindow& window)

@@ -25,6 +25,7 @@ private:
     Button m_secondPlayerButton;
     Player m_firstPlayer;
     Player m_secondPlayer;
+    sf::Sprite m_sprite;
 
     PlayerTurn m_playerTurn;
     bool m_moveState;
