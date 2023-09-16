@@ -4,9 +4,20 @@
 
 Player::Player(ChipColor color, const TextureHolder& textures)
 {
-    // todo: implement position based on chip color
-    for (std::size_t i = 0; i < constants::numberOfChips; ++i)
-        m_chips[i] = { { 0.0f, constants::chipDiameter * static_cast<float>(i) }, color, textures };
+    if (color == ChipColor::white)
+    {
+        for (std::size_t i = 0; i < constants::numberOfChips; ++i)
+            m_chips[i] =
+                { { 120.0f, 855.0f -
+                static_cast<int>(i) * constants::chipDiameter }, color, textures };
+    }
+    else if (color == ChipColor::black)
+    {
+        for (std::size_t i = 0; i < constants::numberOfChips; ++i)
+            m_chips[i] =
+                { { 1560.0f, -15.0f +
+                static_cast<int>(i) * constants::chipDiameter }, color, textures };
+    }
 }
 
 std::array<Chip, constants::numberOfChips>& Player::getChips()

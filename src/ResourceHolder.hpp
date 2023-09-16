@@ -1,6 +1,7 @@
 #ifndef RESOURCE_HOLDER_HPP
 #define RESOURCE_HOLDER_HPP
 
+#include <cassert>
 #include <map>
 #include <memory>
 #include <string>

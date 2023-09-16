@@ -25,33 +25,20 @@ bool Button::isClicked(const sf::Event& event, sf::RenderWindow& window)
   float end_x = m_buttonInfo.position.x + m_buttonInfo.size.x;
   float start_y = m_buttonInfo.position.y;
   float end_y = m_buttonInfo.position.y + m_buttonInfo.size.y;
-<<<<<<< HEAD
-  if (start_x <= mousePosition.x && mousePosition.x <= end_x &&
-      start_y <= mousePosition.y && mousePosition.y <= end_y &&
+  if (start_x <= mousePosition.x && mousePosition.x <= end_x && start_y <= mousePosition.y && mousePosition.y <= end_y &&
       event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
   {
     // m_buttonInfo.color.b += 50;
-=======
-  std::cout << "start x: " << start_x << '\n';
-  std::cout << "end x: " << end_x << '\n';
-  std::cout << "start y: " << start_y << '\n';
-  std::cout << "end y: " << end_y << '\n';
-  if (start_x <= mousePosition.x && mousePosition.x <= end_x && start_y <= mousePosition.y && mousePosition.y <= end_y &&
-      event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) 
-  {
-    // m_buttonInfo.color.b += 50;
     std::cout << "clicked!\n";
->>>>>>> c4a8fb5 (Some fixes)
     return true;
   }
   return false;
 }
 
- void Button::draw(sf::RenderWindow& window) const
- {
+void Button::draw(sf::RenderWindow& window) const
+{
    window.draw(m_rectangle);
    window.draw(m_text);
   //std::cout << "timur huesosishe\n";
 
- }
-
+}
