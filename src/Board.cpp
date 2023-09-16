@@ -24,6 +24,20 @@ Board::Board(sf::Font& font, const TextureHolder& textures, sf::RenderWindow& wi
       m_playerTurn{ PlayerTurn::firstPlayerTurn },
       m_moveState{ false }
 {
+<<<<<<< HEAD
+=======
+    std::cout << "board\n";
+    sf::Font font;
+    font.loadFromFile("../res/Hearty.otf");
+    ButtonTextInfo textInfo{ font, 10, "text", { 0.0f, 0.0f }, sf::Color::Magenta };
+    ButtonInfo info{ { 30.0f, 30.0f }, { 100.0f, 100.0f }, sf::Color::Cyan, textInfo };
+    // m_firstPlayerButton = Button{ info };
+    // std::cout << info.position.x << '\n';
+    m_firstPlayerButton.m_buttonInfo = info;
+    // m_firstPlayerButton.m_buttonInfo.color = sf::Color::Cyan;
+    std::cout << m_firstPlayerButton.m_buttonInfo.position.x << '\n';
+    // std::cout << m_firstPlayerButton.m_buttonInfo.color.b << '\n';
+>>>>>>> c4a8fb5 (Some fixes)
 }
 
 void Board::handleButtonClick(const sf::Event& event, Button& button)

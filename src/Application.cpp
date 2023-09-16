@@ -4,6 +4,7 @@
 
 #include <iostream>
 
+<<<<<<< HEAD
 FontHolder initializeFonts()
 {
     FontHolder fonts{};
@@ -25,8 +26,18 @@ Application::Application()
       m_fonts{ initializeFonts() },
       m_board{ m_fonts.get(Fonts::ID::main), m_textures, m_window }
 {
+=======
+Application::Application()
+    : m_window{ sf::VideoMode{ constants::windowWidth, constants::windowHeight }, "backgammon" },
+      m_textures{},
+      m_fonts{},
+      m_board{ m_fonts, m_textures, m_window }
+{
+    m_fonts.load(Fonts::ID::main, "../res/Hearty.otf");
+>>>>>>> c4a8fb5 (Some fixes)
     // todo: initialize textures and fonts
     // also todo: states for menu and game states
+    std::cout << "constructed\n";
 }
 
 void Application::run()

@@ -12,11 +12,11 @@ public:
    Button(ButtonInfo& buttonInfo, const sf::Font& font);
    bool isClicked(const sf::Event& event, sf::RenderWindow& window);
    void draw(sf::RenderWindow& window) const;
-
+   ButtonInfo m_buttonInfo;
 private:
    sf::RectangleShape m_rectangle;
    sf::Text m_text;
-   ButtonInfo m_buttonInfo;
+   // ButtonInfo m_buttonInfo;
 };
 
 #endif
