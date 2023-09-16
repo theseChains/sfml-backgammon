@@ -22,17 +22,17 @@ public:
     };
 
     State(StateStack& stack, Context context);
-    // virtual ~State();
+    virtual ~State();
 
-    // virtual void draw() = 0;
-    // virtual void handleEvent(const sf::Event& event) = 0;
+    virtual void draw() = 0;
+    virtual bool handleEvent(const sf::Event& event) = 0;
 
 protected:
     void requestStackPush(States::ID stateID);
     void requestStackPop();
     void requestStackClear();
 
-    Context getContext();
+    Context getContext() const;
 
 private:
     StateStack* m_stack{};

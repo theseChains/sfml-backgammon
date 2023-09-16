@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Board.hpp"
+#include "states/StateStack.hpp"
 #include "ResourceHolder.hpp"
 
 class Application
@@ -17,7 +17,7 @@ private:
     sf::RenderWindow m_window;
     TextureHolder m_textures;
     FontHolder m_fonts;
-    Board m_board;
+    StateStack m_stateStack;
 
     void processInput();
     void draw();

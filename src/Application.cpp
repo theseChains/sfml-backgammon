@@ -15,6 +15,7 @@ TextureHolder initializeTextures()
 {
     TextureHolder textures{};
     textures.load(Textures::ID::whiteChip, "../res/whiteChip.png");
+    textures.load(Textures::ID::blackChip, "../res/blackChip.png");
     textures.load(Textures::ID::board, "../res/board.png");
     return textures;
 }
@@ -23,10 +24,12 @@ Application::Application()
     : m_window{ sf::VideoMode{ constants::windowWidth, constants::windowHeight }, "backgammon", sf::Style::Fullscreen },
       m_textures{ initializeTextures() },
       m_fonts{ initializeFonts() },
-      m_board{ m_fonts.get(Fonts::ID::main), m_textures, m_window }
+      m_stateStack{ State::Context{ m_window, m_textures, m_fonts } }
 {
-    // todo: initialize textures and fonts
-    // also todo: states for menu and game states
+    m_stateStack.createState(States::ID::menu);
+    m_stateStack.createState(States::ID::game);
+
+    m_stateStack.pushState(States::ID::menu);
 }
 
 void Application::run()
@@ -56,13 +59,13 @@ void Application::processInput()
                 sf::Mouse::getPosition().y << '\n';
         }
 
-        m_board.handleEvent(event);
+        m_stateStack.handleEvent(event);
     }
 }
 
 void Application::draw()
 {
     m_window.clear();
-    m_board.draw();
+    m_stateStack.draw();
     m_window.display();
 }

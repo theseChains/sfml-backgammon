@@ -10,8 +10,7 @@ Textures::ID toTextureID(ChipColor color)
         case ChipColor::white:
             return Textures::ID::whiteChip;
         case ChipColor::black:
-            // todo: change to black
-            return Textures::ID::whiteChip;
+            return Textures::ID::blackChip;
         default:
             return Textures::ID{};
     }
@@ -23,7 +22,6 @@ Chip::Chip(const sf::Vector2f& position, ChipColor color, const TextureHolder& t
       m_chipCircle{}
 {
     m_chipCircle.setPosition(position);
-    // m_chipCircle.setRadius(constants::chipRadius);
     m_chipCircle.setTexture(textures.get(toTextureID(m_color)));
 }
 
