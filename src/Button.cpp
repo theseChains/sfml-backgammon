@@ -39,6 +39,4 @@ void Button::draw(sf::RenderWindow& window) const
 {
    window.draw(m_rectangle);
    window.draw(m_text);
-  //std::cout << "timur huesosishe\n";
-
 }

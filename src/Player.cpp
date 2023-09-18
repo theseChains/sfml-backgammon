@@ -15,7 +15,7 @@ Player::Player(ChipColor color, const TextureHolder& textures)
     {
         for (std::size_t i = 0; i < constants::numberOfChips; ++i)
             m_chips[i] =
-                { { 1560.0f, -15.0f +
+                { { 1615.0f, 30.0f +
                 static_cast<int>(i) * constants::chipDiameter }, color, textures };
     }
 }
