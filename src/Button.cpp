@@ -1,7 +1,5 @@
 #include "Button.hpp"
 
-#include <iostream>
-
 Button::Button(ButtonInfo& buttonInfo, const sf::Font& font)
   : m_rectangle{},
     m_text{}
@@ -29,7 +27,6 @@ bool Button::isClicked(const sf::Event& event, sf::RenderWindow& window)
       event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
   {
     // m_buttonInfo.color.b += 50;
-    std::cout << "clicked!\n";
     return true;
   }
   return false;
