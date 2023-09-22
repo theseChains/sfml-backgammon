@@ -22,7 +22,8 @@ Board::Board(sf::Font& font, const TextureHolder& textures, sf::RenderWindow& wi
       m_secondPlayer{ ChipColor::black, textures },
       m_sprite{ textures.get(Textures::ID::board) },
       m_playerTurn{ PlayerTurn::firstPlayerTurn },
-      m_moveState{ false }
+      m_moveState{ false },
+      m_chipChooseState{ false }
 {
 }
 
@@ -45,13 +46,18 @@ void Board::handleEvent(const sf::Event& event)
 {
     if (event.type != sf::Event::MouseButtonPressed)
         return;
-
     if (m_playerTurn == PlayerTurn::firstPlayerTurn && !m_moveState)
         handleButtonClick(event, m_firstPlayerButton);
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn && !m_moveState)
         handleButtonClick(event, m_secondPlayerButton);
-    else
-        handleChipMove();
+    else if (m_playerTurn == PlayerTurn::firstPlayerTurn && m_chipChooseState)
+        // game.chooseChip(event, m_window);
+    else if (m_playerTurn == PlayerTurn::secondPlayerTurn && m_chipChooseState)
+        // game.chooseChip(event, m_window);
+    else if (m_playerTurn == PlayerTurn::firstPlayerTurn && m_moveState)
+        // game.moveChip(event, m_window);
+    else if (m_playerTurn == PlayerTurn::secondPlayerTurn && m_moveState)
+        // game.moveChip(event, m_window);
 }
 
 void Board::draw()

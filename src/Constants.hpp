@@ -6,9 +6,13 @@ namespace constants
     inline constexpr int windowWidth{ 1920 };
     inline constexpr int windowHeight{ 1080 };
     inline constexpr int numberOfChips{ 15 };
+    inline constexpr int numberOfSlots{ 24 };
+    inline constexpr int SlotHeight{ 500 };
+    inline constexpr int SlotWidth{ 125 };
+    inline constexpr int EbannayaPalka{ 85 };
 
-    inline constexpr float chipRadius{ 25.0f };
-    inline constexpr float chipDiameter{ chipRadius * 2.0f };
+    inline constexpr int ChipDiam{ 125 };
+
 };
 
 #endif

@@ -29,6 +29,7 @@ private:
 
     PlayerTurn m_playerTurn;
     bool m_moveState;
+    bool m_chipChooseState;
 
     void drawPlayerChips(const Player& player, sf::RenderWindow& window);
 };

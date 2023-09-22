@@ -18,4 +18,4 @@ private:
     std::array<Chip, constants::numberOfChips> m_chips;
 };
 
-#endif
+#endif  //PLAYER_HPP

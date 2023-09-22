@@ -4,7 +4,8 @@
 enum class ChipColor
 {
     white,
-    black
+    black,
+    jopa_timura
 };
 
-#endif
+#endif //CHIP_COLOR_HPP
