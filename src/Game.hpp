@@ -2,21 +2,26 @@
 #define GAME_HPP
 
 #include <array>
+#include <iostream>
 #include "Slot.hpp"
 #include "Random.hpp"
 #include "ChipColor.hpp"
 #include "Constants.hpp"
 #include "PlayerTurn.hpp"
+#include "MoveCount.hpp"
 
 class Game {
   public:
+  Game();
   int GetSlotIndex(const sf::Event& event, sf::RenderWindow& window);
   void SlotInit();
   void setDices();
+  int getDice1();
+  int getDice2();
   void setDolbaeb(bool fl);
   void chooseChip(const sf::Event& event, sf::RenderWindow& window, PlayerTurn turn);
   void handleChipMovement(const sf::Event& event, sf::RenderWindow& window, PlayerTurn turn);
-  bool moveIsValid(int slotMovedFromIndex, int slotMovedToIndex);
+  MoveCount moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipColor color);
   void ChangeHeight(int slot_id);
   bool SlotsSameColor(int from_, int to_);
   void StartPosition();
@@ -36,9 +41,11 @@ class Game {
   bool is_timur;
   int slot_index_take, slot_index_drop;
 
-  bool m_diceThrowState;
-  bool m_moveState;
-  bool m_chipChooseState;
+  bool m_diceThrowState = 1;
+  bool m_moveState = 0;
+  bool m_chipChooseState = 0;
+  int stop_move = 0;
+  bool was_taken_from_head = 0;
 };
 
 #endif

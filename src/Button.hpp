@@ -13,6 +13,7 @@ public:
    bool isClicked(const sf::Event& event, sf::RenderWindow& window);
    void draw(sf::RenderWindow& window) const;
    ButtonInfo m_buttonInfo;
+   void setText(sf::String str);
 private:
    sf::RectangleShape m_rectangle;
    sf::Text m_text;

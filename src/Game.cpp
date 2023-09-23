@@ -1,11 +1,19 @@
 #include "Game.hpp"
 
+Game::Game()
+{
+  SlotInit();
+}
+
 int Game::GetSlotIndex(const sf::Event& event, sf::RenderWindow& window) {
   sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
   // get slot_index
+  //std::cout << "xx, yy: " << sf::Mouse::getPosition(window).x << ' ' <<
+               // sf::Mouse::getPosition(window).y << '\n';
   for(int i = 0; i < constants::numberOfSlots; ++i){
-    if (mousePosition.x >= slots[i].getXLeft() && mousePosition.x <= slots[i].getXLeft() + constants::SlotWidth && 
-    mousePosition.y <= slots[i].getYTop() && mousePosition.y >= slots[i].getYTop() - constants::windowHeight && 
+   // std::cout << "slot x, w, y, h: " << slots[i].getXLeft() << ' ' << constants::SlotWidth + slots[i].getXLeft() <<
+                // ' ' << slots[i].getYTop() << ' ' << constants::SlotHeight + slots[i].getYTop() << '\n';
+    if (slots[i].getBounds().contains(static_cast<sf::Vector2f>(mousePosition)) &&
     event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
       return i;
     }
@@ -13,11 +21,42 @@ int Game::GetSlotIndex(const sf::Event& event, sf::RenderWindow& window) {
   return -1;
 }
 
-bool Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex) {
-  bool ret = 0;
-  if (slotMovedFromIndex + dice_1 == slotMovedToIndex && SlotsSameColor(slotMovedFromIndex, slotMovedToIndex)) ret = 1;
-  else if(slotMovedFromIndex + dice_2 == slotMovedToIndex && SlotsSameColor(slotMovedFromIndex, slotMovedToIndex)) ret = 1;
-  //одного цвета ячейка и промежуточные 2 и итоговая
+MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipColor color) {
+  MoveCount ret = MoveCount::no_move;
+  
+  int slot_dice_1 = slotMovedToIndex - dice_1;
+  int slot_temp_1_1 = slot_dice_1 - dice_2;
+
+  int slot_dice_2 = slotMovedToIndex - dice_2;
+  int slot_temp_1_2 = slot_dice_2 - dice_1;
+
+  int slot_temp_2 = slot_temp_1_1 - dice_1;
+  int slot_temp_3 = slot_temp_2 - dice_1;
+
+  bool no_head_problem = 0;
+  if (color == ChipColor::black) no_head_problem = !was_taken_from_head + 12 - slotMovedFromIndex;
+  else no_head_problem = !was_taken_from_head + slotMovedFromIndex;
+
+  bool are_to_and_from_same = SlotsSameColor(slotMovedFromIndex, slotMovedToIndex);
+  //не дубль
+    if (slotMovedFromIndex + dice_1 == slotMovedToIndex && are_to_and_from_same && no_head_problem) ret = MoveCount::first_move;
+    else if(slotMovedFromIndex + dice_2 == slotMovedToIndex && are_to_and_from_same && no_head_problem) ret = MoveCount::first_move;
+    else if(slotMovedFromIndex + dice_1 + dice_2 == slotMovedFromIndex &&
+            are_to_and_from_same && (SlotsSameColor(slotMovedFromIndex, slot_dice_1) && SlotsSameColor(slotMovedFromIndex, slot_temp_1_1) ||
+            SlotsSameColor(slotMovedFromIndex, slot_dice_2) && SlotsSameColor(slotMovedFromIndex, slot_temp_1_2)) &&
+            (stop_move == 0 || dice_1 == dice_2 && (stop_move == 1 || stop_move == 2))) ret = MoveCount::second_move;
+  //дубль
+  if(dice_1 == dice_2) {
+    if(slotMovedFromIndex + 3 * dice_1 == slotMovedToIndex && are_to_and_from_same && no_head_problem 
+    && SlotsSameColor(slotMovedFromIndex, slot_dice_1) && SlotsSameColor(slotMovedFromIndex, slot_temp_1_1) 
+    && SlotsSameColor(slotMovedFromIndex, slot_temp_2) && (stop_move == 0 || stop_move == 1)) ret = MoveCount::third_move;
+    else if(slotMovedFromIndex + 4 * dice_1 == slotMovedToIndex && are_to_and_from_same && no_head_problem 
+    && SlotsSameColor(slotMovedFromIndex, slot_dice_1) && SlotsSameColor(slotMovedFromIndex, slot_temp_1_1) 
+    && SlotsSameColor(slotMovedFromIndex, slot_temp_2) && SlotsSameColor(slotMovedFromIndex, slot_temp_3) && stop_move == 0) ret = MoveCount::last_move;
+  }
+
+  if(ret != MoveCount::no_move && (slotMovedFromIndex == 0 && color == ChipColor::white ||
+      slotMovedFromIndex == 12 && color == ChipColor::black)) was_taken_from_head = true;
   return ret;
 }
 
@@ -28,11 +67,21 @@ bool Game::SlotsSameColor(int from_, int to_){
 
 void Game::chooseChip(const sf::Event& event, sf::RenderWindow& window, PlayerTurn turn) {
   slot_index_take = GetSlotIndex(event, window);
+  std::cout << "chosen slot index: " << slot_index_take << '\n';
+  if(slot_index_take != -1) {
+    m_chipChooseState = false;
+    m_moveState = true;
+  }
 }
 
 void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, PlayerTurn turn) {
   slot_index_drop = GetSlotIndex(event, window);
-  if (moveIsValid(slot_index_take, slot_index_drop)) {
+  ChipColor color;
+  if(turn == PlayerTurn::firstPlayerTurn) color = ChipColor::white;
+  else color = ChipColor::black;
+  if (slots[slot_index_take].getChipColor() != color) return;
+  MoveCount temp = moveIsValid(slot_index_take, slot_index_drop, color); 
+  if (temp != MoveCount::no_move) {
     // moveChip();
     slots[slot_index_drop].setChipColor(slots[slot_index_take].getChipColor());
     slots[slot_index_drop].incrementChipCount();
@@ -42,6 +91,22 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, 
     }
     ChangeHeight(slot_index_drop);
     ChangeHeight(slot_index_take);
+  }
+  if(temp == MoveCount::first_move) stop_move += 1;
+  else if(temp == MoveCount::second_move) stop_move += 2;
+  else if(temp == MoveCount::third_move) stop_move += 3;
+  else if(temp == MoveCount::last_move) stop_move += 4;
+
+  if(stop_move == 1 || dice_1 == dice_2 && (stop_move == 2 || stop_move == 3)){
+    m_chipChooseState = true;
+    m_moveState = false;
+  }
+  else if(stop_move == 2 && dice_1 != dice_2 || stop_move == 4){
+    m_chipChooseState = false;
+    m_moveState = false;
+    m_diceThrowState = true;
+    stop_move = 0;
+    was_taken_from_head = false;
   }
 }
 
@@ -84,6 +149,17 @@ void Game::setDices(){
   else {
     rnd.DefaultRandom(dice_1, dice_2);
   }
+  m_diceThrowState = false;
+  m_chipChooseState = true;
+  std::cout << "dice 1: " << dice_1 << " dice_2: " << dice_2 << '\n';
+}
+
+int Game::getDice1(){
+  return dice_1;
+}
+
+int Game::getDice2(){
+  return dice_2;
 }
 
 void Game::ChangeHeight(int slot_id){

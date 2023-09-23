@@ -32,8 +32,14 @@ bool Button::isClicked(const sf::Event& event, sf::RenderWindow& window)
   return false;
 }
 
+void Button::setText(sf::String str){
+  m_text.setString(str);
+}
+
 void Button::draw(sf::RenderWindow& window) const
 {
    window.draw(m_rectangle);
    window.draw(m_text);
 }
+
+

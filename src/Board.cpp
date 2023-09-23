@@ -3,6 +3,7 @@
 #include "Aliases.hpp"
 #include "ChipColor.hpp"
 #include "Constants.hpp"
+#include <string>
 
 #include <iostream>
 
@@ -63,9 +64,10 @@ void Board::handleEvent(const sf::Event& event)
         m_game.isDiceThrowState()) {
         m_game.setDolbaeb(false);
         if (m_firstPlayerButton.isClicked(event, m_window)) {
+            std::cout << "first player threw: ";
             m_game.setDices();
-            m_game.setDiceThrowState(false);
-            m_game.setChipChooseState(true);
+            std::string str = std::to_string(m_game.getDice1()) + ' ' + std::to_string(m_game.getDice2());
+            m_firstPlayerButton.setText(str);
         }
     }
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
@@ -73,22 +75,27 @@ void Board::handleEvent(const sf::Event& event)
         m_game.setDolbaeb(true);
         if (m_secondPlayerButton.isClicked(event, m_window)) {
             m_game.setDices();
-            m_game.setDiceThrowState(false);
-            m_game.setChipChooseState(true);
+            std::string str = std::to_string(m_game.getDice1()) + ' ' + std::to_string(m_game.getDice2());
+            m_secondPlayerButton.setText(str);
         }
     }
     else if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
-             m_game.isChipChooseState())
+             m_game.isChipChooseState()) {
+        std::cout << "first player choosing chips\n";
         m_game.chooseChip(event, m_window, m_playerTurn);
+    }
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
-             m_game.isChipChooseState())
+            m_game.isChipChooseState())
         m_game.chooseChip(event, m_window, m_playerTurn);
     else if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
-             m_game.isMoveState())
+        m_game.isMoveState()){
+        std::cout << "first player move chips\n";
         m_game.handleChipMovement(event, m_window, m_playerTurn);
+    }
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
              m_game.isMoveState())
         m_game.handleChipMovement(event, m_window, m_playerTurn);
+    //std::cout << "move state: " << m_game.isMoveState() << " dice state: " << m_game.isDiceThrowState() << " choose state: " << m_game.isChipChooseState();
 }
 
 void Board::draw()
