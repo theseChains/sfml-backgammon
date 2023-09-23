@@ -4,6 +4,7 @@
 #include <array>
 
 #include "Button.hpp"
+#include "Game.hpp"
 #include "Player.hpp"
 #include "PlayerTurn.hpp"
 #include "ResourceHolder.hpp"
@@ -27,9 +28,8 @@ private:
     Player m_secondPlayer;
     sf::Sprite m_sprite;
 
+    Game m_game;
     PlayerTurn m_playerTurn;
-    bool m_moveState;
-    bool m_chipChooseState;
 
     void drawPlayerChips(const Player& player, sf::RenderWindow& window);
 };

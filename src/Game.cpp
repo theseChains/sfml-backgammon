@@ -34,6 +34,14 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, 
   slot_index_drop = GetSlotIndex(event, window);
   if (moveIsValid(slot_index_take, slot_index_drop)) {
     // moveChip();
+    slots[slot_index_drop].setChipColor(slots[slot_index_take].getChipColor());
+    slots[slot_index_drop].incrementChipCount();
+    slots[slot_index_take].decrementChipCount();
+    if (slots[slot_index_take].getChipsCount() == 0) {
+      slots[slot_index_take].setChipColor(ChipColor::jopa_timura);
+    }
+    ChangeHeight(slot_index_drop);
+    ChangeHeight(slot_index_take);
   }
 }
 
@@ -80,10 +88,40 @@ void Game::setDices(){
 
 void Game::ChangeHeight(int slot_id){
   int chip_count = slots[slot_id].getChipsCount();
-  slots[slot_id].setHeight(chip_count * constants::ChipDiam);
+  slots[slot_id].setHeight(chip_count * 65.0);
   if (slots[slot_id].getBounds().intersects(slots[23 - slot_id].getBounds())){
     int raznica = abs(slots[slot_id].getHeight() - slots[23 - slot_id].getHeight());
     slots[slot_id].setHeight(abs(slots[slot_id].getHeight() - raznica / 2));
     slots[23 - slot_id].setHeight(abs(slots[23 - slot_id].getHeight() - raznica / 2));
   }
+}
+
+bool Game::isMoveState() const
+{
+  return m_moveState;
+}
+
+bool Game::isDiceThrowState() const
+{
+  return m_diceThrowState;
+}
+
+bool Game::isChipChooseState() const
+{
+  return m_chipChooseState;
+}
+
+void Game::setMoveState(bool moveState)
+{
+  m_moveState = moveState;
+}
+
+void Game::setDiceThrowState(bool diceThrowState)
+{
+  m_diceThrowState = diceThrowState;
+}
+
+void Game::setChipChooseState(bool chipChooseState)
+{
+  m_chipChooseState = chipChooseState;
 }

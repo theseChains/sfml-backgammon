@@ -21,12 +21,24 @@ class Game {
   bool SlotsSameColor(int from_, int to_);
   void StartPosition();
 
+  bool isMoveState() const;
+  bool isDiceThrowState() const;
+  bool isChipChooseState() const;
+
+  void setMoveState(bool moveState);
+  void setDiceThrowState(bool diceThrowState);
+  void setChipChooseState(bool chipChooseState);
+
   private:
   std::array<Slot, constants::numberOfSlots> slots;
   int dice_1, dice_2;
   Random rnd;
   bool is_timur;
   int slot_index_take, slot_index_drop;
+
+  bool m_diceThrowState;
+  bool m_moveState;
+  bool m_chipChooseState;
 };
 
 #endif

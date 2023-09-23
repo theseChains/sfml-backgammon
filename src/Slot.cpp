@@ -42,3 +42,11 @@ ChipColor Slot::getChipColor(){
 void Slot::setChipColor(ChipColor color){
   m_chipColor = color;
 }
+
+void Slot::incrementChipCount() {
+  ++m_chipCount;
+}
+
+void Slot::decrementChipCount() {
+  --m_chipCount;
+}

@@ -21,20 +21,12 @@ Board::Board(sf::Font& font, const TextureHolder& textures, sf::RenderWindow& wi
       m_firstPlayer{ ChipColor::white, textures },
       m_secondPlayer{ ChipColor::black, textures },
       m_sprite{ textures.get(Textures::ID::board) },
-      m_playerTurn{ PlayerTurn::firstPlayerTurn },
-      m_moveState{ false },
-      m_chipChooseState{ false }
+      m_playerTurn{ PlayerTurn::firstPlayerTurn }
 {
 }
 
 void Board::handleButtonClick(const sf::Event& event, Button& button)
 {
-    if (button.isClicked(event, m_window))
-    {
-        std::cout << "clicked!";
-        // std::pair<int, int> dicePoints{ throwDice() };
-        m_moveState = true;
-    }
 }
 
 void handleChipMove()
@@ -46,18 +38,37 @@ void Board::handleEvent(const sf::Event& event)
 {
     if (event.type != sf::Event::MouseButtonPressed)
         return;
-    if (m_playerTurn == PlayerTurn::firstPlayerTurn && !m_moveState)
-        handleButtonClick(event, m_firstPlayerButton);
-    else if (m_playerTurn == PlayerTurn::secondPlayerTurn && !m_moveState)
-        handleButtonClick(event, m_secondPlayerButton);
-    else if (m_playerTurn == PlayerTurn::firstPlayerTurn && m_chipChooseState)
-        // game.chooseChip(event, m_window);
-    else if (m_playerTurn == PlayerTurn::secondPlayerTurn && m_chipChooseState)
-        // game.chooseChip(event, m_window);
-    else if (m_playerTurn == PlayerTurn::firstPlayerTurn && m_moveState)
-        // game.moveChip(event, m_window);
-    else if (m_playerTurn == PlayerTurn::secondPlayerTurn && m_moveState)
-        // game.moveChip(event, m_window);
+
+    if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
+        m_game.isDiceThrowState()) {
+        m_game.setDolbaeb(false);
+        if (m_firstPlayerButton.isClicked(event, m_window)) {
+            m_game.setDices();
+            m_game.setDiceThrowState(false);
+            m_game.setChipChooseState(true);
+        }
+    }
+    else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
+             m_game.isDiceThrowState()) {
+        m_game.setDolbaeb(true);
+        if (m_secondPlayerButton.isClicked(event, m_window)) {
+            m_game.setDices();
+            m_game.setDiceThrowState(false);
+            m_game.setChipChooseState(true);
+        }
+    }
+    else if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
+             m_game.isChipChooseState())
+        m_game.chooseChip(event, m_window, m_playerTurn);
+    else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
+             m_game.isChipChooseState())
+        m_game.chooseChip(event, m_window, m_playerTurn);
+    else if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
+             m_game.isMoveState())
+        m_game.handleChipMovement(event, m_window, m_playerTurn);
+    else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
+             m_game.isMoveState())
+        m_game.handleChipMovement(event, m_window, m_playerTurn);
 }
 
 void Board::draw()

@@ -13,6 +13,7 @@ namespace constants
 
     inline constexpr int ChipDiam{ 125 };
 
+    inline constexpr float firstChipDistanceConstant{ 2.5 };
 };
 
 #endif
