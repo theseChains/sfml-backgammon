@@ -6,10 +6,29 @@
 
 #include <iostream>
 
-Button initializePlayerButton(sf::Font& font)
+Button initializeFirstPlayerButton(sf::Font& font)
 {
-    ButtonTextInfo textInfo{ 10, "text", { 40.0f, 40.0f }, sf::Color::Magenta };
-    ButtonInfo info{ { 30.0f, 30.0f }, { 100.0f, 100.0f }, sf::Color::Cyan, textInfo };
+    sf::Vector2f buttonPosition{ 45.0f, 500.0f };
+    sf::Vector2f buttonSize{ 75.0f, 80.0f };
+    sf::Vector2f buttonTextPosition{ buttonPosition.x + 10.0f,
+                                     buttonPosition.y + 10.0f };
+    ButtonTextInfo textInfo{ 20, "throw\ndice", buttonTextPosition,
+                             sf::Color::Black };
+    ButtonInfo info{ buttonPosition, buttonSize, sf::Color::White, textInfo };
+    Button button{ info, font };
+
+    return button;
+}
+
+Button initializeSecondPlayerButton(sf::Font& font)
+{
+    sf::Vector2f buttonPosition{ 1800.0f, 500.0f };
+    sf::Vector2f buttonSize{ 75.0f, 80.0f };
+    sf::Vector2f buttonTextPosition{ buttonPosition.x + 10.0f,
+                                     buttonPosition.y + 10.0f };
+    ButtonTextInfo textInfo{ 20, "throw\ndice", buttonTextPosition,
+                             sf::Color::Black };
+    ButtonInfo info{ buttonPosition, buttonSize, sf::Color::White, textInfo };
     Button button{ info, font };
 
     return button;
@@ -17,7 +36,8 @@ Button initializePlayerButton(sf::Font& font)
 
 Board::Board(sf::Font& font, const TextureHolder& textures, sf::RenderWindow& window)
     : m_window{ window },
-      m_firstPlayerButton{ initializePlayerButton(font) },
+      m_firstPlayerButton{ initializeFirstPlayerButton(font) },
+      m_secondPlayerButton{ initializeSecondPlayerButton(font) },
       m_firstPlayer{ ChipColor::white, textures },
       m_secondPlayer{ ChipColor::black, textures },
       m_sprite{ textures.get(Textures::ID::board) },
@@ -73,12 +93,11 @@ void Board::handleEvent(const sf::Event& event)
 
 void Board::draw()
 {
-    // m_boardDrawer.drawBoard(stuff);
-    m_firstPlayerButton.draw(m_window);
     m_window.draw(m_sprite);
+    m_firstPlayerButton.draw(m_window);
+    m_secondPlayerButton.draw(m_window);
     drawPlayerChips(m_firstPlayer, m_window);
     drawPlayerChips(m_secondPlayer, m_window);
-    // drawPlayerChips(m_secondPlayer, m_window);
 }
 
 void Board::drawPlayerChips(const Player& player, sf::RenderWindow& window)
