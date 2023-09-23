@@ -1,0 +1,67 @@
+[
+{
+  "directory": "/Users/nikimade/Desktop/Projects/sfml-backgammon/build",
+  "command": "/usr/bin/clang++  -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11.6 -I/Users/nikimade/.brew/Cellar/sfml/2.5.1_2/include -Wall -Wshadow -Wextra -Wpedantic -Wconversion -std=gnu++20 -o CMakeFiles/app.dir/src/Application.cpp.o -c /Users/nikimade/Desktop/Projects/sfml-backgammon/src/Application.cpp",
+  "file": "/Users/nikimade/Desktop/Projects/sfml-backgammon/src/Application.cpp"
+},
+{
+  "directory": "/Users/nikimade/Desktop/Projects/sfml-backgammon/build",
+  "command": "/usr/bin/clang++  -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11.6 -I/Users/nikimade/.brew/Cellar/sfml/2.5.1_2/include -Wall -Wshadow -Wextra -Wpedantic -Wconversion -std=gnu++20 -o CMakeFiles/app.dir/src/Board.cpp.o -c /Users/nikimade/Desktop/Projects/sfml-backgammon/src/Board.cpp",
+  "file": "/Users/nikimade/Desktop/Projects/sfml-backgammon/src/Board.cpp"
+},
+{
+  "directory": "/Users/nikimade/Desktop/Projects/sfml-backgammon/build",
+  "command": "/usr/bin/clang++  -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11.6 -I/Users/nikimade/.brew/Cellar/sfml/2.5.1_2/include -Wall -Wshadow -Wextra -Wpedantic -Wconversion -std=gnu++20 -o CMakeFiles/app.dir/src/Button.cpp.o -c /Users/nikimade/Desktop/Projects/sfml-backgammon/src/Button.cpp",
+  "file": "/Users/nikimade/Desktop/Projects/sfml-backgammon/src/Button.cpp"
+},
+{
+  "directory": "/Users/nikimade/Desktop/Projects/sfml-backgammon/build",
+  "command": "/usr/bin/clang++  -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11.6 -I/Users/nikimade/.brew/Cellar/sfml/2.5.1_2/include -Wall -Wshadow -Wextra -Wpedantic -Wconversion -std=gnu++20 -o CMakeFiles/app.dir/src/Chip.cpp.o -c /Users/nikimade/Desktop/Projects/sfml-backgammon/src/Chip.cpp",
+  "file": "/Users/nikimade/Desktop/Projects/sfml-backgammon/src/Chip.cpp"
+},
+{
+  "directory": "/Users/nikimade/Desktop/Projects/sfml-backgammon/build",
+  "command": "/usr/bin/clang++  -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11.6 -I/Users/nikimade/.brew/Cellar/sfml/2.5.1_2/include -Wall -Wshadow -Wextra -Wpedantic -Wconversion -std=gnu++20 -o CMakeFiles/app.dir/src/Game.cpp.o -c /Users/nikimade/Desktop/Projects/sfml-backgammon/src/Game.cpp",
+  "file": "/Users/nikimade/Desktop/Projects/sfml-backgammon/src/Game.cpp"
+},
+{
+  "directory": "/Users/nikimade/Desktop/Projects/sfml-backgammon/build",
+  "command": "/usr/bin/clang++  -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11.6 -I/Users/nikimade/.brew/Cellar/sfml/2.5.1_2/include -Wall -Wshadow -Wextra -Wpedantic -Wconversion -std=gnu++20 -o CMakeFiles/app.dir/src/Player.cpp.o -c /Users/nikimade/Desktop/Projects/sfml-backgammon/src/Player.cpp",
+  "file": "/Users/nikimade/Desktop/Projects/sfml-backgammon/src/Player.cpp"
+},
+{
+  "directory": "/Users/nikimade/Desktop/Projects/sfml-backgammon/build",
+  "command": "/usr/bin/clang++  -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11.6 -I/Users/nikimade/.brew/Cellar/sfml/2.5.1_2/include -Wall -Wshadow -Wextra -Wpedantic -Wconversion -std=gnu++20 -o CMakeFiles/app.dir/src/Random.cpp.o -c /Users/nikimade/Desktop/Projects/sfml-backgammon/src/Random.cpp",
+  "file": "/Users/nikimade/Desktop/Projects/sfml-backgammon/src/Random.cpp"
+},
+{
+  "directory": "/Users/nikimade/Desktop/Projects/sfml-backgammon/build",
+  "command": "/usr/bin/clang++  -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11.6 -I/Users/nikimade/.brew/Cellar/sfml/2.5.1_2/include -Wall -Wshadow -Wextra -Wpedantic -Wconversion -std=gnu++20 -o CMakeFiles/app.dir/src/Slot.cpp.o -c /Users/nikimade/Desktop/Projects/sfml-backgammon/src/Slot.cpp",
+  "file": "/Users/nikimade/Desktop/Projects/sfml-backgammon/src/Slot.cpp"
+},
+{
+  "directory": "/Users/nikimade/Desktop/Projects/sfml-backgammon/build",
+  "command": "/usr/bin/clang++  -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11.6 -I/Users/nikimade/.brew/Cellar/sfml/2.5.1_2/include -Wall -Wshadow -Wextra -Wpedantic -Wconversion -std=gnu++20 -o CMakeFiles/app.dir/src/main.cpp.o -c /Users/nikimade/Desktop/Projects/sfml-backgammon/src/main.cpp",
+  "file": "/Users/nikimade/Desktop/Projects/sfml-backgammon/src/main.cpp"
+},
+{
+  "directory": "/Users/nikimade/Desktop/Projects/sfml-backgammon/build",
+  "command": "/usr/bin/clang++  -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11.6 -I/Users/nikimade/.brew/Cellar/sfml/2.5.1_2/include -Wall -Wshadow -Wextra -Wpedantic -Wconversion -std=gnu++20 -o CMakeFiles/app.dir/src/states/GameState.cpp.o -c /Users/nikimade/Desktop/Projects/sfml-backgammon/src/states/GameState.cpp",
+  "file": "/Users/nikimade/Desktop/Projects/sfml-backgammon/src/states/GameState.cpp"
+},
+{
+  "directory": "/Users/nikimade/Desktop/Projects/sfml-backgammon/build",
+  "command": "/usr/bin/clang++  -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11.6 -I/Users/nikimade/.brew/Cellar/sfml/2.5.1_2/include -Wall -Wshadow -Wextra -Wpedantic -Wconversion -std=gnu++20 -o CMakeFiles/app.dir/src/states/MenuState.cpp.o -c /Users/nikimade/Desktop/Projects/sfml-backgammon/src/states/MenuState.cpp",
+  "file": "/Users/nikimade/Desktop/Projects/sfml-backgammon/src/states/MenuState.cpp"
+},
+{
+  "directory": "/Users/nikimade/Desktop/Projects/sfml-backgammon/build",
+  "command": "/usr/bin/clang++  -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11.6 -I/Users/nikimade/.brew/Cellar/sfml/2.5.1_2/include -Wall -Wshadow -Wextra -Wpedantic -Wconversion -std=gnu++20 -o CMakeFiles/app.dir/src/states/State.cpp.o -c /Users/nikimade/Desktop/Projects/sfml-backgammon/src/states/State.cpp",
+  "file": "/Users/nikimade/Desktop/Projects/sfml-backgammon/src/states/State.cpp"
+},
+{
+  "directory": "/Users/nikimade/Desktop/Projects/sfml-backgammon/build",
+  "command": "/usr/bin/clang++  -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/Library/Frameworks -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk -mmacosx-version-min=11.6 -I/Users/nikimade/.brew/Cellar/sfml/2.5.1_2/include -Wall -Wshadow -Wextra -Wpedantic -Wconversion -std=gnu++20 -o CMakeFiles/app.dir/src/states/StateStack.cpp.o -c /Users/nikimade/Desktop/Projects/sfml-backgammon/src/states/StateStack.cpp",
+  "file": "/Users/nikimade/Desktop/Projects/sfml-backgammon/src/states/StateStack.cpp"
+}
+]
