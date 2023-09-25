@@ -1,3 +1,0 @@
-/home/sublunary/repos/sfml-backgammon/build/CMakeFiles/app.dir
-/home/sublunary/repos/sfml-backgammon/build/CMakeFiles/edit_cache.dir
-/home/sublunary/repos/sfml-backgammon/build/CMakeFiles/rebuild_cache.dir
