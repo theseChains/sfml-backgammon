@@ -54,7 +54,7 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipCo
     dice_2 = 0;
     ret = MoveCount::true_move;
   }
-  else if((slotMovedFromIndex + dice_1 + dice_2) % 24 == slotMovedFromIndex &&
+  else if((slotMovedFromIndex + dice_1 + dice_2) % 24 == slotMovedToIndex &&
           are_to_and_from_same && (SlotsSameColor(slotMovedFromIndex, slot_dice_1)
           || SlotsSameColor(slotMovedFromIndex, slot_dice_2)) && no_head_problem){
     dice_1 = dice_2 = 0;
