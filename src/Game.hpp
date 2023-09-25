@@ -35,6 +35,8 @@ class Game {
   void setDiceThrowState(bool diceThrowState);
   void setChipChooseState(bool chipChooseState);
 
+  void draw(sf::RenderWindow& window);
+
   // remove later
   void drawBounds(sf::RenderWindow& window);
 

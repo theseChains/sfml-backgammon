@@ -143,18 +143,19 @@ void Game::StartPosition(const TextureHolder& textures){
   slots[0].setChipsCount(15);
   slots[12].setChipColor(ChipColor::black);
   slots[12].setChipsCount(15);
-  for (int i{ 0 }; i < 12; ++i)
+  for (int i{ 0 }; i < constants::numberOfChips; ++i)
   {
     Chip whiteChip{ { 120.0f, 855.0f - static_cast<int>(i) *
                 constants::ChipDiam /
                 constants::firstChipDistanceConstant }, ChipColor::white, textures };
     slots[0].pushChip(whiteChip);
   }
-  for (int i{ 0 }; i < 12; ++i)
+  for (int i{ 0 }; i < constants::numberOfChips; ++i)
   {
     Chip blackChip{ { 1615.0f, 30.0f +
         static_cast<int>(i) * constants::ChipDiam /
           constants::firstChipDistanceConstant }, ChipColor::black, textures };
+    slots[12].pushChip(blackChip);
   }
   ChangeHeight(0);
   ChangeHeight(12);
@@ -242,6 +243,16 @@ void Game::setDiceThrowState(bool diceThrowState)
 void Game::setChipChooseState(bool chipChooseState)
 {
   m_chipChooseState = chipChooseState;
+}
+
+void Game::draw(sf::RenderWindow& window)
+{
+  for (auto& slot : slots)
+  {
+    slot.drawChips(window);
+  }
+
+  drawBounds(window);
 }
 
 void Game::drawBounds(sf::RenderWindow& window)

@@ -15,7 +15,7 @@ void Slot::setYTop(float newTop) {
 sf::FloatRect Slot::getBounds(){
   return m_bounds;
 }
- 
+
 float Slot::getHeight(){
   return m_bounds.height;
 }
@@ -57,14 +57,22 @@ void Slot::decrementChipCount() {
 
 void Slot::pushChip(const Chip& chip)
 {
-  m_chips.push(chip);
+  m_chips.push_back(chip);
 }
 
 Chip Slot::popChip()
 {
-  Chip chip{ m_chips.top() };
-  m_chips.pop();
+  Chip chip{ m_chips.back() };
+  m_chips.pop_back();
   return chip;
+}
+
+void Slot::drawChips(sf::RenderWindow& window)
+{
+  for (int i{ 0 }; i < m_chips.size(); ++i)
+  {
+    m_chips[i].draw(window);
+  }
 }
 
 void Slot::drawSlotBounds(sf::RenderWindow& window, int index)

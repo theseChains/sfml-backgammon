@@ -104,9 +104,9 @@ void Board::draw()
     m_window.draw(m_sprite);
     m_firstPlayerButton.draw(m_window);
     m_secondPlayerButton.draw(m_window);
-    drawPlayerChips(m_firstPlayer, m_window);
-    drawPlayerChips(m_secondPlayer, m_window);
-    m_game.drawBounds(m_window);
+    // drawPlayerChips(m_firstPlayer, m_window);
+    // drawPlayerChips(m_secondPlayer, m_window);
+    m_game.draw(m_window);
 }
 
 void Board::drawPlayerChips(const Player& player, sf::RenderWindow& window)

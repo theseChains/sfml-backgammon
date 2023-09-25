@@ -7,7 +7,7 @@
 #include "ChipColor.hpp"
 #include "Constants.hpp"
 
-#include <stack>
+#include <vector>
 
 class Slot
 {
@@ -31,12 +31,13 @@ public:
 
     // remove later
     void drawSlotBounds(sf::RenderWindow& window, int index);
+    void drawChips(sf::RenderWindow& window);
 
 private:
     sf::FloatRect m_bounds;
     int m_chipCount;
     ChipColor m_chipColor;
-    std::stack<Chip> m_chips;
+    std::vector<Chip> m_chips;
 
     // remove later
     sf::RectangleShape m_boundsRectangle;
