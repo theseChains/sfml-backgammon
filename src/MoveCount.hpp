@@ -4,10 +4,7 @@
 enum class MoveCount
 {
     no_move,
-    first_move,
-    second_move,
-    third_move,
-    last_move
+    true_move
 };
 
 #endif //MOVE_COUNT_HPP

@@ -4,13 +4,12 @@ Game::Game(const TextureHolder& textures)
 {
   SlotInit();
   StartPosition(textures);
+  dice_1 = dice_2 = dice_3 = dice_4 = 0;
+  dubl = 0;
 }
 
 int Game::GetSlotIndex(const sf::Event& event, sf::RenderWindow& window) {
   sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-  // get slot_index
-  //std::cout << "xx, yy: " << sf::Mouse::getPosition(window).x << ' ' <<
-               // sf::Mouse::getPosition(window).y << '\n';
   for(int i = 0; i < constants::numberOfSlots; ++i){
    std::cout << "slot x, w, y, h: " << slots[i].getXLeft() << ' ' << constants::SlotWidth + slots[i].getXLeft() <<
                 ' ' << slots[i].getYTop() << ' ' << constants::SlotHeight + slots[i].getYTop() << '\n';
@@ -24,15 +23,22 @@ int Game::GetSlotIndex(const sf::Event& event, sf::RenderWindow& window) {
 
 MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipColor color) {
   MoveCount ret = MoveCount::no_move;
-  
+  if(slotMovedFromIndex == slotMovedToIndex) return MoveCount::no_move;
+  if(dubl && dice_1 == 0){
+    dice_1 = dice_3;
+    dice_3 = 0;
+  }
+
+  if(dubl && dice_2 == 0){
+    dice_2 = dice_4;
+    dice_4 = 0;
+  }
+
   int slot_dice_1 = slotMovedToIndex - dice_1;
-  int slot_temp_1_1 = slot_dice_1 - dice_2;
-
   int slot_dice_2 = slotMovedToIndex - dice_2;
-  int slot_temp_1_2 = slot_dice_2 - dice_1;
 
-  int slot_temp_2 = slot_temp_1_1 - dice_1;
-  int slot_temp_3 = slot_temp_2 - dice_1;
+  int slot_temp_3 = slotMovedToIndex - 2 * dice_1;// for ebanni dubl
+  int slot_temp_4 = slotMovedToIndex - 3 * dice_1;// for ebanni dubl
 
   bool no_head_problem = 0;
   if (color == ChipColor::black) no_head_problem = !was_taken_from_head + 12 - slotMovedFromIndex;
@@ -40,20 +46,33 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipCo
 
   bool are_to_and_from_same = SlotsSameColor(slotMovedFromIndex, slotMovedToIndex);
   //не дубль
-    if (slotMovedFromIndex + dice_1 == slotMovedToIndex && are_to_and_from_same && no_head_problem) ret = MoveCount::first_move;
-    else if(slotMovedFromIndex + dice_2 == slotMovedToIndex && are_to_and_from_same && no_head_problem) ret = MoveCount::first_move;
-    else if(slotMovedFromIndex + dice_1 + dice_2 == slotMovedFromIndex &&
-            are_to_and_from_same && (SlotsSameColor(slotMovedFromIndex, slot_dice_1) && SlotsSameColor(slotMovedFromIndex, slot_temp_1_1) ||
-            SlotsSameColor(slotMovedFromIndex, slot_dice_2) && SlotsSameColor(slotMovedFromIndex, slot_temp_1_2)) &&
-            (stop_move == 0 || dice_1 == dice_2 && (stop_move == 1 || stop_move == 2))) ret = MoveCount::second_move;
+  if ((slotMovedFromIndex + dice_1) % 24== slotMovedToIndex && are_to_and_from_same && no_head_problem){
+    dice_1 = 0;
+    ret = MoveCount::true_move;
+  } 
+  else if((slotMovedFromIndex + dice_2) % 24 == slotMovedToIndex && are_to_and_from_same && no_head_problem){
+    dice_2 = 0;
+    ret = MoveCount::true_move;
+  }
+  else if((slotMovedFromIndex + dice_1 + dice_2) % 24 == slotMovedFromIndex &&
+          are_to_and_from_same && (SlotsSameColor(slotMovedFromIndex, slot_dice_1)
+          || SlotsSameColor(slotMovedFromIndex, slot_dice_2)) && no_head_problem){
+    dice_1 = dice_2 = 0;
+    ret = MoveCount::true_move;
+  } 
   //дубль
-  if(dice_1 == dice_2) {
+  if(dubl) {
     if(slotMovedFromIndex + 3 * dice_1 == slotMovedToIndex && are_to_and_from_same && no_head_problem 
-    && SlotsSameColor(slotMovedFromIndex, slot_dice_1) && SlotsSameColor(slotMovedFromIndex, slot_temp_1_1) 
-    && SlotsSameColor(slotMovedFromIndex, slot_temp_2) && (stop_move == 0 || stop_move == 1)) ret = MoveCount::third_move;
-    else if(slotMovedFromIndex + 4 * dice_1 == slotMovedToIndex && are_to_and_from_same && no_head_problem 
-    && SlotsSameColor(slotMovedFromIndex, slot_dice_1) && SlotsSameColor(slotMovedFromIndex, slot_temp_1_1) 
-    && SlotsSameColor(slotMovedFromIndex, slot_temp_2) && SlotsSameColor(slotMovedFromIndex, slot_temp_3) && stop_move == 0) ret = MoveCount::last_move;
+      && SlotsSameColor(slotMovedFromIndex, slot_dice_1) && SlotsSameColor(slotMovedFromIndex, slot_temp_3)){
+      dice_1 = dice_2 = dice_3 = 0;
+      ret = MoveCount::true_move;
+    }
+    if(slotMovedFromIndex + 4 * dice_1 == slotMovedToIndex && are_to_and_from_same && no_head_problem 
+      && SlotsSameColor(slotMovedFromIndex, slot_dice_1) && SlotsSameColor(slotMovedFromIndex, slot_temp_3) 
+      && SlotsSameColor(slotMovedFromIndex, slot_temp_4)){
+      dice_1 = dice_2 = dice_3 = dice_4 = 0;
+      ret = MoveCount::true_move;
+    }
   }
 
   if(ret != MoveCount::no_move && (slotMovedFromIndex == 0 && color == ChipColor::white ||
@@ -84,7 +103,11 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, 
   ChipColor color;
   if(turn == PlayerTurn::firstPlayerTurn) color = ChipColor::white;
   else color = ChipColor::black;
-  if (slots[slot_index_take].getChipColor() != color) return;
+  if (slots[slot_index_take].getChipColor() != color){
+    m_chipChooseState = true;
+    m_moveState = false;
+    return;
+  } 
   MoveCount temp = moveIsValid(slot_index_take, slot_index_drop, color); 
   if (temp != MoveCount::no_move) {
     // moveChip();
@@ -97,21 +120,17 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, 
     ChangeHeight(slot_index_drop);
     ChangeHeight(slot_index_take);
   }
-  if(temp == MoveCount::first_move) stop_move += 1;
-  else if(temp == MoveCount::second_move) stop_move += 2;
-  else if(temp == MoveCount::third_move) stop_move += 3;
-  else if(temp == MoveCount::last_move) stop_move += 4;
 
-  if(stop_move == 1 || dice_1 == dice_2 && (stop_move == 2 || stop_move == 3)){
-    m_chipChooseState = true;
-    m_moveState = false;
-  }
-  else if(stop_move == 2 && dice_1 != dice_2 || stop_move == 4){
+  if(!dice_1 && !dice_2 && !dice_3 && !dice_3){
     m_chipChooseState = false;
     m_moveState = false;
     m_diceThrowState = true;
-    stop_move = 0;
     was_taken_from_head = false;
+    dubl = false;
+  }
+  else {
+    m_chipChooseState = true;
+    m_moveState = false;
   }
 }
 
@@ -168,9 +187,13 @@ void Game::setDices(){
   else {
     rnd.DefaultRandom(dice_1, dice_2);
   }
+  if(dice_1 == dice_2){
+    dubl = true;
+    dice_3 = dice_1;
+    dice_4 = dice_1;
+  }
   m_diceThrowState = false;
   m_chipChooseState = true;
-  std::cout << "dice 1: " << dice_1 << " dice_2: " << dice_2 << '\n';
 }
 
 int Game::getDice1(){

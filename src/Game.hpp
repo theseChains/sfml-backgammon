@@ -42,15 +42,15 @@ class Game {
 
   private:
   std::array<Slot, constants::numberOfSlots> slots;
-  int dice_1, dice_2;
+  int dice_1, dice_2, dice_3, dice_4;
   Random rnd;
   bool is_timur;
   int slot_index_take, slot_index_drop;
 
   bool m_diceThrowState = 1;
+  bool dubl;
   bool m_moveState = 0;
   bool m_chipChooseState = 0;
-  int stop_move = 0;
   bool was_taken_from_head = 0;
 };
 
