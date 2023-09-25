@@ -8,6 +8,10 @@ float Slot::getYTop(){
   return m_bounds.top;
 }
 
+void Slot::setYTop(float newTop) {
+  m_bounds.top = newTop;
+}
+
 sf::FloatRect Slot::getBounds(){
   return m_bounds;
 }
@@ -49,4 +53,34 @@ void Slot::incrementChipCount() {
 
 void Slot::decrementChipCount() {
   --m_chipCount;
+}
+
+void Slot::pushChip(const Chip& chip)
+{
+  m_chips.push(chip);
+}
+
+Chip Slot::popChip()
+{
+  Chip chip{ m_chips.top() };
+  m_chips.pop();
+  return chip;
+}
+
+void Slot::drawSlotBounds(sf::RenderWindow& window, int index)
+{
+  m_boundsRectangle.setSize({ m_bounds.width, m_bounds.height });
+  m_boundsRectangle.setPosition({ m_bounds.left, m_bounds.top });
+  m_boundsRectangle.setFillColor(sf::Color::Transparent);
+  m_boundsRectangle.setOutlineThickness(2.0f);
+  if (index >= 0 && index < 6)
+    m_boundsRectangle.setOutlineColor(sf::Color::Blue);
+  else if (index >= 6 && index < 12)
+    m_boundsRectangle.setOutlineColor(sf::Color::Yellow);
+  if (index >= 12 && index < 18)
+    m_boundsRectangle.setOutlineColor(sf::Color::Magenta);
+  if (index >= 18 && index < 24)
+    m_boundsRectangle.setOutlineColor(sf::Color::Green);
+
+  window.draw(m_boundsRectangle);
 }

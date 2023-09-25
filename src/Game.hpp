@@ -12,7 +12,7 @@
 
 class Game {
   public:
-  Game();
+  Game(const TextureHolder& textures);
   int GetSlotIndex(const sf::Event& event, sf::RenderWindow& window);
   void SlotInit();
   void setDices();
@@ -22,9 +22,10 @@ class Game {
   void chooseChip(const sf::Event& event, sf::RenderWindow& window, PlayerTurn turn);
   void handleChipMovement(const sf::Event& event, sf::RenderWindow& window, PlayerTurn turn);
   MoveCount moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipColor color);
+  void moveChip();
   void ChangeHeight(int slot_id);
   bool SlotsSameColor(int from_, int to_);
-  void StartPosition();
+  void StartPosition(const TextureHolder& textures);
 
   bool isMoveState() const;
   bool isDiceThrowState() const;
@@ -33,6 +34,9 @@ class Game {
   void setMoveState(bool moveState);
   void setDiceThrowState(bool diceThrowState);
   void setChipChooseState(bool chipChooseState);
+
+  // remove later
+  void drawBounds(sf::RenderWindow& window);
 
   private:
   std::array<Slot, constants::numberOfSlots> slots;

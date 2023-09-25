@@ -42,7 +42,8 @@ Board::Board(sf::Font& font, const TextureHolder& textures, sf::RenderWindow& wi
       m_firstPlayer{ ChipColor::white, textures },
       m_secondPlayer{ ChipColor::black, textures },
       m_sprite{ textures.get(Textures::ID::board) },
-      m_playerTurn{ PlayerTurn::firstPlayerTurn }
+      m_playerTurn{ PlayerTurn::firstPlayerTurn },
+      m_game{ textures }
 {
 }
 
@@ -105,6 +106,7 @@ void Board::draw()
     m_secondPlayerButton.draw(m_window);
     drawPlayerChips(m_firstPlayer, m_window);
     drawPlayerChips(m_secondPlayer, m_window);
+    m_game.drawBounds(m_window);
 }
 
 void Board::drawPlayerChips(const Player& player, sf::RenderWindow& window)

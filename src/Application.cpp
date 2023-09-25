@@ -26,6 +26,8 @@ Application::Application()
       m_fonts{ initializeFonts() },
       m_stateStack{ State::Context{ m_window, m_textures, m_fonts } }
 {
+    m_window.setVerticalSyncEnabled(true);
+
     m_stateStack.createState(States::ID::menu);
     m_stateStack.createState(States::ID::game);
 
