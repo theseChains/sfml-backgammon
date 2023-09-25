@@ -13,6 +13,8 @@ public:
     Chip() = default;
     Chip(const sf::Vector2f& position, ChipColor color, const TextureHolder& textures);
 
+    void setPosition(const sf::Vector2f& position);
+
     void draw(sf::RenderWindow& window);
 
 private:

@@ -20,7 +20,7 @@ class Game {
   int getDice2();
   void setDolbaeb(bool fl);
   void chooseChip(const sf::Event& event, sf::RenderWindow& window, PlayerTurn turn);
-  void handleChipMovement(const sf::Event& event, sf::RenderWindow& window, PlayerTurn turn);
+  void handleChipMovement(const sf::Event& event, sf::RenderWindow& window, PlayerTurn& turn);
   MoveCount moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipColor color);
   void moveChip();
   void ChangeHeight(int slot_id);

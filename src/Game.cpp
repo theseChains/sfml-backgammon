@@ -96,9 +96,22 @@ void Game::chooseChip(const sf::Event& event, sf::RenderWindow& window, PlayerTu
 
 void Game::moveChip()
 {
+  std::cout << "moving a chip\n";
+  Slot& slotToMoveFrom{ slots[slot_index_take] };
+  Slot& slotToMoveTo{ slots[slot_index_drop] };
+  Chip chipToMove{ slotToMoveFrom.popChip() };
+
+  float slotHeight{ slotToMoveTo.getHeight() };
+  // todo: update for slots that have chips already
+  float slotToMoveToY{
+      slots[slot_index_drop].getYTop() + slotHeight - constants::ChipDiam };
+  float slotToMoveToX{ slots[slot_index_drop].getXLeft() };
+  std::cout << "new coords: x y " << slotToMoveToX << ' ' << slotToMoveToY << '\n';
+  chipToMove.setPosition({ slotToMoveToX, slotToMoveToY });
+  slotToMoveTo.pushChip(chipToMove);
 }
 
-void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, PlayerTurn turn) {
+void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, PlayerTurn& turn) {
   slot_index_drop = GetSlotIndex(event, window);
   ChipColor color;
   if(turn == PlayerTurn::firstPlayerTurn) color = ChipColor::white;
@@ -127,6 +140,7 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, 
     m_diceThrowState = true;
     was_taken_from_head = false;
     dubl = false;
+    turn = (turn == PlayerTurn::firstPlayerTurn ? PlayerTurn::secondPlayerTurn : PlayerTurn::firstPlayerTurn);
   }
   else {
     m_chipChooseState = true;
