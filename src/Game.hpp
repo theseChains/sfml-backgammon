@@ -12,7 +12,7 @@
 
 class Game {
   public:
-  Game(const TextureHolder& textures);
+  Game(TextureHolder& textures);
   int GetSlotIndex(const sf::Event& event, sf::RenderWindow& window);
   void SlotInit();
   void setDices();
@@ -40,8 +40,9 @@ class Game {
   // remove later
   void drawBounds(sf::RenderWindow& window);
 
-  private:
+private:
   std::array<Slot, constants::numberOfSlots> slots;
+  TextureHolder& m_textures;
   int dice_1, dice_2, dice_3, dice_4;
   Random rnd;
   bool is_timur;

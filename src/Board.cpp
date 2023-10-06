@@ -35,7 +35,7 @@ Button initializeSecondPlayerButton(sf::Font& font)
     return button;
 }
 
-Board::Board(sf::Font& font, const TextureHolder& textures, sf::RenderWindow& window)
+Board::Board(sf::Font& font, TextureHolder& textures, sf::RenderWindow& window)
     : m_window{ window },
       m_firstPlayerButton{ initializeFirstPlayerButton(font) },
       m_secondPlayerButton{ initializeSecondPlayerButton(font) },

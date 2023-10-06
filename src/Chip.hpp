@@ -14,11 +14,11 @@ public:
     Chip(const sf::Vector2f& position, ChipColor color, const TextureHolder& textures);
 
     void setPosition(const sf::Vector2f& position);
+    ChipColor getColor() const;
 
     void draw(sf::RenderWindow& window);
 
 private:
-    sf::Vector2f m_position;
     ChipColor m_color;
     sf::Sprite m_chipCircle;
 };

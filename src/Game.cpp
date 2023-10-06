@@ -1,9 +1,10 @@
 #include "Game.hpp"
 
-Game::Game(const TextureHolder& textures)
+Game::Game(TextureHolder& textures)
+  : m_textures{ textures }
 {
   SlotInit();
-  StartPosition(textures);
+  StartPosition(m_textures);
   dice_1 = dice_2 = dice_3 = dice_4 = 0;
   dubl = 0;
 }
@@ -11,8 +12,8 @@ Game::Game(const TextureHolder& textures)
 int Game::GetSlotIndex(const sf::Event& event, sf::RenderWindow& window) {
   sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
   for(int i = 0; i < constants::numberOfSlots; ++i){
-   std::cout << "slot x, w, y, h: " << slots[i].getXLeft() << ' ' << constants::SlotWidth + slots[i].getXLeft() <<
-                ' ' << slots[i].getYTop() << ' ' << constants::SlotHeight + slots[i].getYTop() << '\n';
+   // std::cout << "slot x, w, y, h: " << slots[i].getXLeft() << ' ' << constants::SlotWidth + slots[i].getXLeft() <<
+                // ' ' << slots[i].getYTop() << ' ' << constants::SlotHeight + slots[i].getYTop() << '\n';
     if (slots[i].getBounds().contains(static_cast<sf::Vector2f>(mousePosition)) &&
     event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
       return i;
@@ -44,12 +45,14 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipCo
   if (color == ChipColor::black) no_head_problem = !was_taken_from_head + 12 - slotMovedFromIndex;
   else no_head_problem = !was_taken_from_head + slotMovedFromIndex;
 
+  std::cout << std::boolalpha << "no head probl: " << no_head_problem << '\n';
+
   bool are_to_and_from_same = SlotsSameColor(slotMovedFromIndex, slotMovedToIndex);
   //не дубль
-  if ((slotMovedFromIndex + dice_1) % 24== slotMovedToIndex && are_to_and_from_same && no_head_problem){
+  if ((slotMovedFromIndex + dice_1) % 24 == slotMovedToIndex && are_to_and_from_same && no_head_problem){
     dice_1 = 0;
     ret = MoveCount::true_move;
-  } 
+  }
   else if((slotMovedFromIndex + dice_2) % 24 == slotMovedToIndex && are_to_and_from_same && no_head_problem){
     dice_2 = 0;
     ret = MoveCount::true_move;
@@ -59,7 +62,7 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipCo
           || SlotsSameColor(slotMovedFromIndex, slot_dice_2)) && no_head_problem){
     dice_1 = dice_2 = 0;
     ret = MoveCount::true_move;
-  } 
+  }
   //дубль
   if(dubl) {
     if(slotMovedFromIndex + 3 * dice_1 == slotMovedToIndex && are_to_and_from_same && no_head_problem 
@@ -67,7 +70,7 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipCo
       dice_1 = dice_2 = dice_3 = 0;
       ret = MoveCount::true_move;
     }
-    if(slotMovedFromIndex + 4 * dice_1 == slotMovedToIndex && are_to_and_from_same && no_head_problem 
+    if(slotMovedFromIndex + 4 * dice_1 == slotMovedToIndex && are_to_and_from_same && no_head_problem
       && SlotsSameColor(slotMovedFromIndex, slot_dice_1) && SlotsSameColor(slotMovedFromIndex, slot_temp_3) 
       && SlotsSameColor(slotMovedFromIndex, slot_temp_4)){
       dice_1 = dice_2 = dice_3 = dice_4 = 0;
@@ -87,11 +90,26 @@ bool Game::SlotsSameColor(int from_, int to_){
 
 void Game::chooseChip(const sf::Event& event, sf::RenderWindow& window, PlayerTurn turn) {
   slot_index_take = GetSlotIndex(event, window);
-  std::cout << "chosen slot index: " << slot_index_take << '\n';
+  // std::cout << "chosen slot index: " << slot_index_take << '\n';
   if(slot_index_take != -1) {
     m_chipChooseState = false;
     m_moveState = true;
   }
+}
+
+float getShrinkageConstant(int numberOfChips)
+{
+  float shrinkageConstant{};
+  if (numberOfChips == 1 || numberOfChips == 2)
+    shrinkageConstant = 1.0f;
+  else if (numberOfChips > 2 && numberOfChips <= 5)
+    shrinkageConstant = 1.5f;
+  else if (numberOfChips > 5 && numberOfChips <= 10)
+    shrinkageConstant = 2.0f;
+  else
+    shrinkageConstant = 2.5f;
+
+  return shrinkageConstant;
 }
 
 void Game::moveChip()
@@ -101,14 +119,38 @@ void Game::moveChip()
   Slot& slotToMoveTo{ slots[slot_index_drop] };
   Chip chipToMove{ slotToMoveFrom.popChip() };
 
-  float slotHeight{ slotToMoveTo.getHeight() };
-  // todo: update for slots that have chips already
-  float slotToMoveToY{
-      slots[slot_index_drop].getYTop() + slotHeight - constants::ChipDiam };
-  float slotToMoveToX{ slots[slot_index_drop].getXLeft() };
-  std::cout << "new coords: x y " << slotToMoveToX << ' ' << slotToMoveToY << '\n';
-  chipToMove.setPosition({ slotToMoveToX, slotToMoveToY });
-  slotToMoveTo.pushChip(chipToMove);
+  // float slotHeight{ slotToMoveTo.getHeight() };
+  // todo: update for slots that have chips already.. or not? xd
+  // float slotToMoveToY{};
+  // if (slot_index_drop < 12)
+      // slotToMoveToY =
+        // slots[slot_index_drop].getYTop() + slotHeight - constants::ChipDiam;
+  // else
+      // slotToMoveToY =
+        //slots[slot_index_drop].getYTop() + slotHeight - constants::ChipDiam;
+  // float slotToMoveToX{ slots[slot_index_drop].getXLeft() };
+  // std::cout << "new coords: x y " << slotToMoveToX << ' ' << slotToMoveToY << '\n';
+  // chipToMove.setPosition({ slotToMoveToX, slotToMoveToY });
+  // slotToMoveTo.pushChip(chipToMove);
+
+  int numberOfChips{ slotToMoveTo.getChipsCount() };
+  ChipColor chipColor{ chipToMove.getColor() };
+  float xLeft{ slotToMoveTo.getXLeft() };
+  slotToMoveTo.clearChips();
+  float yStart{};
+  if (slot_index_drop < 12)
+    yStart = 920.0f;
+  else
+    yStart = 30.0f;
+  for (int i{ 0 }; i < numberOfChips; ++i)
+  {
+    if (slot_index_drop < 12)
+      slotToMoveTo.pushChip({ { xLeft, yStart - i * constants::ChipDiam /
+          getShrinkageConstant(numberOfChips) }, chipColor, m_textures });
+    else
+      slotToMoveTo.pushChip({ { xLeft, yStart + i * constants::ChipDiam /
+          getShrinkageConstant(numberOfChips) }, chipColor, m_textures });
+  }
 }
 
 void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, PlayerTurn& turn) {
@@ -123,7 +165,6 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, 
   } 
   MoveCount temp = moveIsValid(slot_index_take, slot_index_drop, color); 
   if (temp != MoveCount::no_move) {
-    // moveChip();
     slots[slot_index_drop].setChipColor(slots[slot_index_take].getChipColor());
     slots[slot_index_drop].incrementChipCount();
     slots[slot_index_take].decrementChipCount();
@@ -132,6 +173,7 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, 
     }
     ChangeHeight(slot_index_drop);
     ChangeHeight(slot_index_take);
+    moveChip();
   }
 
   if(!dice_1 && !dice_2 && !dice_3 && !dice_3){
@@ -178,15 +220,13 @@ void Game::StartPosition(const TextureHolder& textures){
   slots[12].setChipsCount(15);
   for (int i{ 0 }; i < constants::numberOfChips; ++i)
   {
-    Chip whiteChip{ { 120.0f, 855.0f - static_cast<int>(i) *
-                constants::ChipDiam /
+    Chip whiteChip{ { 170.0f, 920.0f - i * constants::ChipDiam /
                 constants::firstChipDistanceConstant }, ChipColor::white, textures };
     slots[0].pushChip(whiteChip);
   }
   for (int i{ 0 }; i < constants::numberOfChips; ++i)
   {
-    Chip blackChip{ { 1615.0f, 30.0f +
-        static_cast<int>(i) * constants::ChipDiam /
+    Chip blackChip{ { 1620.0f, 30.0f + i * constants::ChipDiam /
           constants::firstChipDistanceConstant }, ChipColor::black, textures };
     slots[12].pushChip(blackChip);
   }
@@ -218,38 +258,53 @@ int Game::getDice2(){
   return dice_2;
 }
 
-void Game::ChangeHeight(int slot_id){
-  int chip_count = slots[slot_id].getChipsCount();
-  if (slot_id < 12)
+void Game::ChangeHeight(int slotID){
+  int numberOfChips{ slots[slotID].getChipsCount() };
+  float currentHeight{ slots[slotID].getHeight() };
+  float newHeight{ numberOfChips * constants::ChipDiam / getShrinkageConstant(numberOfChips) };
+  if (numberOfChips == 0)
+    newHeight = 500.0f;
+  float heightDifference{ std::abs(currentHeight - newHeight) };
+  if (slotID < 12)
   {
-    float heightDifference{
-        static_cast<float>(std::abs(slots[slot_id].getHeight() -
-            chip_count * 65.0)) };
-    slots[slot_id].setYTop(slots[slot_id].getYTop() - heightDifference);
-    slots[slot_id].setHeight(chip_count * 65.0);
+    float oldYTop{ slots[slotID].getYTop() };
+    if (currentHeight < newHeight)
+    {
+      slots[slotID].setYTop(oldYTop - heightDifference);
+      slots[slotID].setHeight(currentHeight + heightDifference);
+    }
+    else if (currentHeight > newHeight)
+    {
+      slots[slotID].setYTop(oldYTop + heightDifference);
+      slots[slotID].setHeight(currentHeight - heightDifference);
+    }
   }
   else
   {
-    slots[slot_id].setHeight(chip_count * 65.0);
+    if (currentHeight < newHeight)
+      slots[slotID].setHeight(currentHeight + heightDifference);
+    else if (currentHeight > newHeight)
+      slots[slotID].setHeight(currentHeight - heightDifference);
   }
 
-  std::cout << "slot id: " << slot_id << " height: " << slots[slot_id].getHeight() << '\n';
-  if (slots[slot_id].getBounds().intersects(slots[23 - slot_id].getBounds())){
-    int raznica = std::abs(slots[slot_id].getHeight() - slots[23 - slot_id].getHeight());
-    std::cout << "slot id: " << slot_id << " difference: " << raznica << '\n';
-    if (slot_id < 12)
-    {
-      slots[slot_id].setYTop(slots[slot_id].getYTop() + raznica / 2);
-      slots[slot_id].setHeight(slots[slot_id].getHeight() - raznica / 2);
-      slots[23 - slot_id].setHeight(slots[23 - slot_id].getHeight() - raznica / 2);
-    }
-    else
-    {
-      slots[slot_id].setHeight(slots[slot_id].getHeight() - raznica / 2);
-      slots[23 - slot_id].setYTop(slots[23 - slot_id].getYTop() + raznica / 2);
-      slots[23 - slot_id].setHeight(slots[23 - slot_id].getHeight() - raznica / 2);
-    }
-  }
+  std::cout << "slot id: " << slotID << " height: " << slots[slotID].getHeight()
+            << "ytop: " << slots[slotID].getYTop() << '\n';
+  //if (slots[slot_id].getBounds().intersects(slots[23 - slot_id].getBounds())){
+    //int raznica = std::abs(slots[slot_id].getHeight() - slots[23 - slot_id].getHeight());
+    //std::cout << "slot id: " << slot_id << " difference: " << raznica << '\n';
+    //if (slot_id < 12)
+    //{
+      //slots[slot_id].setYTop(slots[slot_id].getYTop() + raznica / 2);
+      //slots[slot_id].setHeight(slots[slot_id].getHeight() - raznica / 2);
+      //slots[23 - slot_id].setHeight(slots[23 - slot_id].getHeight() - raznica / 2);
+    //}
+    //else
+    //{
+      //slots[slot_id].setHeight(slots[slot_id].getHeight() - raznica / 2);
+      //slots[23 - slot_id].setYTop(slots[23 - slot_id].getYTop() + raznica / 2);
+      //slots[23 - slot_id].setHeight(slots[23 - slot_id].getHeight() - raznica / 2);
+    //}
+  //}
 }
 
 bool Game::isMoveState() const

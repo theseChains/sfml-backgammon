@@ -28,6 +28,7 @@ public:
 
     void pushChip(const Chip& chip);
     Chip popChip();
+    void clearChips();
 
     // remove later
     void drawSlotBounds(sf::RenderWindow& window, int index);

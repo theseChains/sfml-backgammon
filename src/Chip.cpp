@@ -17,8 +17,7 @@ Textures::ID toTextureID(ChipColor color)
 }
 
 Chip::Chip(const sf::Vector2f& position, ChipColor color, const TextureHolder& textures)
-    : m_position{ position },
-      m_color{ color },
+    : m_color{ color },
       m_chipCircle{}
 {
     m_chipCircle.setPosition(position);
@@ -27,7 +26,12 @@ Chip::Chip(const sf::Vector2f& position, ChipColor color, const TextureHolder& t
 
 void Chip::setPosition(const sf::Vector2f& position)
 {
-    m_position = position;
+    m_chipCircle.setPosition(position);
+}
+
+ChipColor Chip::getColor() const
+{
+    return m_color;
 }
 
 void Chip::draw(sf::RenderWindow& window)

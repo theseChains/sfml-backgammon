@@ -67,6 +67,11 @@ Chip Slot::popChip()
   return chip;
 }
 
+void Slot::clearChips()
+{
+  m_chips.clear();
+}
+
 void Slot::drawChips(sf::RenderWindow& window)
 {
   for (int i{ 0 }; i < m_chips.size(); ++i)
