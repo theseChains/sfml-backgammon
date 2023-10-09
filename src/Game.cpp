@@ -42,6 +42,7 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipCo
   int slot_temp_4 = slotMovedToIndex - 3 * dice_1;// for ebanni dubl
 
   bool no_head_problem = 0;
+  // false if slot_id is 13 or 1 for black
   if (color == ChipColor::black) no_head_problem = !was_taken_from_head + 12 - slotMovedFromIndex;
   else no_head_problem = !was_taken_from_head + slotMovedFromIndex;
 
@@ -100,57 +101,46 @@ void Game::chooseChip(const sf::Event& event, sf::RenderWindow& window, PlayerTu
 float getShrinkageConstant(int numberOfChips)
 {
   float shrinkageConstant{};
-  if (numberOfChips == 1 || numberOfChips == 2)
+  if (numberOfChips <= 4)
     shrinkageConstant = 1.0f;
-  else if (numberOfChips > 2 && numberOfChips <= 5)
-    shrinkageConstant = 1.5f;
-  else if (numberOfChips > 5 && numberOfChips <= 10)
-    shrinkageConstant = 2.0f;
   else
-    shrinkageConstant = 2.5f;
+  {
+    int heightOfChips{ numberOfChips * (constants::ChipDiam + 20) };
+    shrinkageConstant = static_cast<float>(heightOfChips) /
+                        static_cast<float>(constants::SlotHeight);
+    std::cout << "shrinkageConstant: " << shrinkageConstant << '\n';
+  }
 
   return shrinkageConstant;
 }
 
-void Game::moveChip()
+void Game::updateSlotChips(Slot& slot, int slotIndex)
 {
-  std::cout << "moving a chip\n";
-  Slot& slotToMoveFrom{ slots[slot_index_take] };
-  Slot& slotToMoveTo{ slots[slot_index_drop] };
-  Chip chipToMove{ slotToMoveFrom.popChip() };
-
-  // float slotHeight{ slotToMoveTo.getHeight() };
-  // todo: update for slots that have chips already.. or not? xd
-  // float slotToMoveToY{};
-  // if (slot_index_drop < 12)
-      // slotToMoveToY =
-        // slots[slot_index_drop].getYTop() + slotHeight - constants::ChipDiam;
-  // else
-      // slotToMoveToY =
-        //slots[slot_index_drop].getYTop() + slotHeight - constants::ChipDiam;
-  // float slotToMoveToX{ slots[slot_index_drop].getXLeft() };
-  // std::cout << "new coords: x y " << slotToMoveToX << ' ' << slotToMoveToY << '\n';
-  // chipToMove.setPosition({ slotToMoveToX, slotToMoveToY });
-  // slotToMoveTo.pushChip(chipToMove);
-
-  int numberOfChips{ slotToMoveTo.getChipsCount() };
-  ChipColor chipColor{ chipToMove.getColor() };
-  float xLeft{ slotToMoveTo.getXLeft() };
-  slotToMoveTo.clearChips();
+  float xLeft{ slot.getXLeft() };
+  slot.clearChips();
   float yStart{};
-  if (slot_index_drop < 12)
+  if (slotIndex < 12)
     yStart = 920.0f;
   else
     yStart = 30.0f;
+
+  int numberOfChips{ slot.getChipsCount() };
+  ChipColor chipColor{ slot.getChipColor() };
   for (int i{ 0 }; i < numberOfChips; ++i)
   {
-    if (slot_index_drop < 12)
-      slotToMoveTo.pushChip({ { xLeft, yStart - i * constants::ChipDiam /
+    if (slotIndex < 12)
+      slot.pushChip({ { xLeft, yStart - i * constants::ChipDiam /
           getShrinkageConstant(numberOfChips) }, chipColor, m_textures });
     else
-      slotToMoveTo.pushChip({ { xLeft, yStart + i * constants::ChipDiam /
+      slot.pushChip({ { xLeft, yStart + i * constants::ChipDiam /
           getShrinkageConstant(numberOfChips) }, chipColor, m_textures });
   }
+}
+
+void Game::moveChip()
+{
+  updateSlotChips(slots[slot_index_take], slot_index_take);
+  updateSlotChips(slots[slot_index_drop], slot_index_drop);
 }
 
 void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, PlayerTurn& turn) {
@@ -171,8 +161,8 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, 
     if (slots[slot_index_take].getChipsCount() == 0) {
       slots[slot_index_take].setChipColor(ChipColor::jopa_timura);
     }
-    ChangeHeight(slot_index_drop);
-    ChangeHeight(slot_index_take);
+    // ChangeHeight(slot_index_drop);
+    // ChangeHeight(slot_index_take);
     moveChip();
   }
 
@@ -230,8 +220,8 @@ void Game::StartPosition(const TextureHolder& textures){
           constants::firstChipDistanceConstant }, ChipColor::black, textures };
     slots[12].pushChip(blackChip);
   }
-  ChangeHeight(0);
-  ChangeHeight(12);
+  // ChangeHeight(0);
+  // ChangeHeight(12);
 }
 
 void Game::setDices(){

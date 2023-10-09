@@ -22,6 +22,7 @@ class Game {
   void chooseChip(const sf::Event& event, sf::RenderWindow& window, PlayerTurn turn);
   void handleChipMovement(const sf::Event& event, sf::RenderWindow& window, PlayerTurn& turn);
   MoveCount moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipColor color);
+  void updateSlotChips(Slot& slot, int slotIndex);
   void moveChip();
   void ChangeHeight(int slot_id);
   bool SlotsSameColor(int from_, int to_);
