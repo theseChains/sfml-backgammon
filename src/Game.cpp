@@ -41,12 +41,10 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipCo
   int slot_temp_3 = slotMovedToIndex - 2 * dice_1;// for ebanni dubl
   int slot_temp_4 = slotMovedToIndex - 3 * dice_1;// for ebanni dubl
 
-  bool no_head_problem = 0;
+  int no_head_problem = 0;
   // false if slot_id is 13 or 1 for black
-  if (color == ChipColor::black) no_head_problem = !was_taken_from_head + 12 - slotMovedFromIndex;
+  if (color == ChipColor::black) no_head_problem = !was_taken_from_head + abs(12 - slotMovedFromIndex);
   else no_head_problem = !was_taken_from_head + slotMovedFromIndex;
-
-  std::cout << std::boolalpha << "no head probl: " << no_head_problem << '\n';
 
   bool are_to_and_from_same = SlotsSameColor(slotMovedFromIndex, slotMovedToIndex);
   //не дубль
@@ -166,7 +164,7 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window, 
     moveChip();
   }
 
-  if(!dice_1 && !dice_2 && !dice_3 && !dice_3){
+  if(!dice_1 && !dice_2 && !dice_3 && !dice_4){
     m_chipChooseState = false;
     m_moveState = false;
     m_diceThrowState = true;
