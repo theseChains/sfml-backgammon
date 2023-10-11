@@ -27,6 +27,7 @@ class Game {
   void ChangeHeight(int slot_id);
   bool SlotsSameColor(int from_, int to_);
   void StartPosition(const TextureHolder& textures);
+  bool SexChips(int slotMovedToIndex, ChipColor col);
 
   bool isMoveState() const;
   bool isDiceThrowState() const;

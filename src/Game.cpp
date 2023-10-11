@@ -42,36 +42,37 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex, ChipCo
   int slot_temp_4 = slotMovedToIndex - 3 * dice_1;// for ebanni dubl
 
   int no_head_problem = 0;
-  // false if slot_id is 13 or 1 for black
+  bool six = SexChips(slotMovedToIndex, slots[slotMovedFromIndex].getChipColor());
+  
   if (color == ChipColor::black) no_head_problem = !was_taken_from_head + abs(12 - slotMovedFromIndex);
   else no_head_problem = !was_taken_from_head + slotMovedFromIndex;
 
   bool are_to_and_from_same = SlotsSameColor(slotMovedFromIndex, slotMovedToIndex);
   //не дубль
-  if ((slotMovedFromIndex + dice_1) % 24 == slotMovedToIndex && are_to_and_from_same && no_head_problem){
+  if ((slotMovedFromIndex + dice_1) % 24 == slotMovedToIndex && are_to_and_from_same && no_head_problem && six){
     dice_1 = 0;
     ret = MoveCount::true_move;
   }
-  else if((slotMovedFromIndex + dice_2) % 24 == slotMovedToIndex && are_to_and_from_same && no_head_problem){
+  else if((slotMovedFromIndex + dice_2) % 24 == slotMovedToIndex && are_to_and_from_same && no_head_problem && six){
     dice_2 = 0;
     ret = MoveCount::true_move;
   }
   else if((slotMovedFromIndex + dice_1 + dice_2) % 24 == slotMovedToIndex &&
           are_to_and_from_same && (SlotsSameColor(slotMovedFromIndex, slot_dice_1)
-          || SlotsSameColor(slotMovedFromIndex, slot_dice_2)) && no_head_problem){
+          || SlotsSameColor(slotMovedFromIndex, slot_dice_2)) && no_head_problem && six){
     dice_1 = dice_2 = 0;
     ret = MoveCount::true_move;
   }
   //дубль
   if(dubl) {
     if(slotMovedFromIndex + 3 * dice_1 == slotMovedToIndex && are_to_and_from_same && no_head_problem 
-      && SlotsSameColor(slotMovedFromIndex, slot_dice_1) && SlotsSameColor(slotMovedFromIndex, slot_temp_3)){
+      && SlotsSameColor(slotMovedFromIndex, slot_dice_1) && SlotsSameColor(slotMovedFromIndex, slot_temp_3) && six){
       dice_1 = dice_2 = dice_3 = 0;
       ret = MoveCount::true_move;
     }
     if(slotMovedFromIndex + 4 * dice_1 == slotMovedToIndex && are_to_and_from_same && no_head_problem
       && SlotsSameColor(slotMovedFromIndex, slot_dice_1) && SlotsSameColor(slotMovedFromIndex, slot_temp_3) 
-      && SlotsSameColor(slotMovedFromIndex, slot_temp_4)){
+      && SlotsSameColor(slotMovedFromIndex, slot_temp_4) && six){
       dice_1 = dice_2 = dice_3 = dice_4 = 0;
       ret = MoveCount::true_move;
     }
@@ -94,6 +95,36 @@ void Game::chooseChip(const sf::Event& event, sf::RenderWindow& window, PlayerTu
     m_chipChooseState = false;
     m_moveState = true;
   }
+}
+
+bool Game::SexChips(int slotMovedToIndex, ChipColor col){
+  int n = 1;
+  int count = 0;
+  while(true){
+    if(slots[(24 + slotMovedToIndex - n) % 24].getChipColor() != col) break;
+    count++;
+    n++;
+  }
+  n = 1;
+  while(true){
+    if(slots[(slotMovedToIndex + n) % 24].getChipColor() != col) break;
+    count++;
+    n++;
+  }
+  bool has_chip_at_home = 0;
+  if(col == ChipColor::black){
+    for(int i = 18; i <= 23; i++){
+      if(slots[i].getChipColor() == ChipColor::white) has_chip_at_home = 1;
+    }
+  }
+  else {
+    for(int i = 6; i <= 11; i++){
+      if(slots[i].getChipColor() == ChipColor::black) has_chip_at_home = 1;
+    }
+  }
+  std::cout << "count = " << count << "homie_chip = " << has_chip_at_home;
+  if(count >= 5 && !has_chip_at_home) return 0;
+  else return 1;
 }
 
 float getShrinkageConstant(int numberOfChips)
