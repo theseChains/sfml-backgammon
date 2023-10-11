@@ -47,15 +47,6 @@ Board::Board(sf::Font& font, TextureHolder& textures, sf::RenderWindow& window)
 {
 }
 
-void Board::handleButtonClick(const sf::Event& event, Button& button)
-{
-}
-
-void handleChipMove()
-{
-
-}
-
 void Board::handleEvent(const sf::Event& event)
 {
     if (event.type != sf::Event::MouseButtonPressed)
@@ -65,7 +56,7 @@ void Board::handleEvent(const sf::Event& event)
         m_game.isDiceThrowState()) {
         m_game.setDolbaeb(false);
         if (m_firstPlayerButton.isClicked(event, m_window)) {
-            std::cout << "first player threw: ";
+            // std::cout << "first player threw: ";
             m_game.setDices();
             std::string str = std::to_string(m_game.getDice1()) + ' ' + std::to_string(m_game.getDice2());
             m_firstPlayerButton.setText(str);
@@ -96,7 +87,6 @@ void Board::handleEvent(const sf::Event& event)
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
              m_game.isMoveState())
         m_game.handleChipMovement(event, m_window, m_playerTurn);
-    //std::cout << "move state: " << m_game.isMoveState() << " dice state: " << m_game.isDiceThrowState() << " choose state: " << m_game.isChipChooseState();
 }
 
 void Board::draw()
@@ -104,8 +94,6 @@ void Board::draw()
     m_window.draw(m_sprite);
     m_firstPlayerButton.draw(m_window);
     m_secondPlayerButton.draw(m_window);
-    // drawPlayerChips(m_firstPlayer, m_window);
-    // drawPlayerChips(m_secondPlayer, m_window);
     m_game.draw(m_window);
 }
 
