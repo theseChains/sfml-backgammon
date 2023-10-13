@@ -49,7 +49,6 @@ void Board::handleEvent(const sf::Event& event)
 {
     if (event.type != sf::Event::MouseButtonPressed)
         return;
-
     if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
         m_game.isDiceThrowState())
     {
@@ -87,12 +86,19 @@ void Board::handleEvent(const sf::Event& event)
     else if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
              m_game.isMoveState())
     {
-        std::cout << "first player move chips\n";
-        m_game.handleChipMovement(event, m_window, m_playerTurn);
+        if(m_game.CheckMoves(m_playerTurn)){
+            std::cout << "first player move chips\n";
+            m_game.handleChipMovement(event, m_window, m_playerTurn);
+        }
     }
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
              m_game.isMoveState())
-        m_game.handleChipMovement(event, m_window, m_playerTurn);
+    {
+        if(m_game.CheckMoves(m_playerTurn)){
+            std::cout << "second player move chips\n";
+            m_game.handleChipMovement(event, m_window, m_playerTurn);
+        }
+    }
 }
 
 void Board::draw()

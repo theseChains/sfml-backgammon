@@ -32,8 +32,9 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex,
                             ChipColor color)
 {
     MoveCount ret = MoveCount::no_move;
+
     if (slotMovedFromIndex == slotMovedToIndex)
-        return MoveCount::no_move;
+        return ret;
     if (dubl && dice_1 == 0)
     {
         dice_1 = dice_3;
@@ -53,6 +54,7 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex,
     int slot_temp_4 = slotMovedToIndex - 3 * dice_1;  // for ebanni dubl
 
     int no_head_problem = 0;
+
     bool six =
         SexChips(slotMovedToIndex, slots[slotMovedFromIndex].getChipColor());
 
@@ -177,6 +179,44 @@ bool Game::SexChips(int slotMovedToIndex, ChipColor col)
         return 1;
 }
 
+bool Game::CheckMoves(PlayerTurn & turn){
+  ChipColor oppoz_col;
+  int count = 0;
+  bool res = 0;
+  ChipColor col;
+  if (turn == PlayerTurn::firstPlayerTurn)
+        col = ChipColor::white;
+    else
+        col = ChipColor::black;
+
+  if(col == ChipColor::black) oppoz_col = ChipColor::white;
+  else oppoz_col = ChipColor::black;
+  int i;
+  if (was_taken_from_head) i = 1;
+  else i = 0;
+  for(i; i < 24; i++){
+    if(slots[i].getChipColor() == col){
+      count++;
+      if((dice_1 != 0 && slots[(dice_1 + i) % 24].getChipColor() != oppoz_col) ||
+        (dice_2 != 0 && slots[(dice_2 + i) % 24].getChipColor() != oppoz_col) ||
+        (dice_3 != 0 && slots[(dice_3 + i) % 24].getChipColor() != oppoz_col) ||
+        (dice_4 != 0 && slots[(dice_4 + i) % 24].getChipColor() != oppoz_col)) res = 1;
+    }
+    if(count == 15) break;
+  }
+  if(!res){
+    m_chipChooseState = false;
+    m_moveState = false;
+    m_diceThrowState = true;
+    was_taken_from_head = false;
+    dubl = false;
+    turn =
+      (turn == PlayerTurn::firstPlayerTurn ? PlayerTurn::secondPlayerTurn
+                              : PlayerTurn::firstPlayerTurn);
+  }
+  return res;
+}
+
 float getShrinkageConstant(int numberOfChips)
 {
     float shrinkageConstant{};
@@ -230,19 +270,21 @@ void Game::moveChip()
 
 void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
                               PlayerTurn& turn)
-{
+{ 
     slot_index_drop = GetSlotIndex(event, window);
     ChipColor color;
     if (turn == PlayerTurn::firstPlayerTurn)
         color = ChipColor::white;
     else
         color = ChipColor::black;
+
     if (slots[slot_index_take].getChipColor() != color || slot_index_drop == -1)
     {
         m_chipChooseState = true;
         m_moveState = false;
         return;
     }
+    
     MoveCount temp = moveIsValid(slot_index_take, slot_index_drop, color);
     if (temp != MoveCount::no_move)
     {
@@ -339,6 +381,7 @@ void Game::StartPosition(const TextureHolder& textures)
 
 void Game::setDices()
 {
+  
     if (is_timur)
     {
         rnd.SmeshnoiRandom(dice_1, dice_2);
@@ -353,6 +396,7 @@ void Game::setDices()
         dice_3 = dice_1;
         dice_4 = dice_1;
     }
+    if(slots[0].getChipsCount() == 15 && slots[12].getChipsCount() == 15) dice_1 = dice_2 = dice_3 = dice_4 = 6;
     m_diceThrowState = false;
     m_chipChooseState = true;
 }

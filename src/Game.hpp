@@ -32,6 +32,7 @@ public:
     bool SlotsSameColor(int from_, int to_);
     void StartPosition(const TextureHolder& textures);
     bool SexChips(int slotMovedToIndex, ChipColor col);
+    bool CheckMoves(PlayerTurn & turn);
 
     bool isMoveState() const;
     bool isDiceThrowState() const;
