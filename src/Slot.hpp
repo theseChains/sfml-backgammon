@@ -2,12 +2,11 @@
 #define SLOT_HPP
 
 #include <SFML/Graphics.hpp>
+#include <vector>
 
 #include "Chip.hpp"
 #include "ChipColor.hpp"
 #include "Constants.hpp"
-
-#include <vector>
 
 class Slot
 {
@@ -44,4 +43,4 @@ private:
     sf::RectangleShape m_boundsRectangle;
 };
 
-#endif  //SLOT_HPP
+#endif  // SLOT_HPP

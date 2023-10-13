@@ -8,4 +8,4 @@ enum class ChipColor
     jopa_timura
 };
 
-#endif //CHIP_COLOR_HPP
+#endif  // CHIP_COLOR_HPP

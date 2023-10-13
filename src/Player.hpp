@@ -1,10 +1,10 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
+#include <array>
+
 #include "Chip.hpp"
 #include "Constants.hpp"
-
-#include <array>
 
 class Player
 {
@@ -18,4 +18,4 @@ private:
     std::array<Chip, constants::numberOfChips> m_chips;
 };
 
-#endif  //PLAYER_HPP
+#endif  // PLAYER_HPP

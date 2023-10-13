@@ -1,7 +1,7 @@
-#include "Application.hpp"
-
 #include <iostream>
 #include <stdexcept>
+
+#include "Application.hpp"
 
 int main()
 {

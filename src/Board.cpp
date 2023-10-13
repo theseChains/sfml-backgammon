@@ -1,11 +1,11 @@
 #include "Board.hpp"
 
+#include <iostream>
+#include <string>
+
 #include "Aliases.hpp"
 #include "ChipColor.hpp"
 #include "Constants.hpp"
-#include <string>
-
-#include <iostream>
 
 Button initializeFirstPlayerButton(sf::Font& font)
 {
@@ -39,8 +39,6 @@ Board::Board(sf::Font& font, TextureHolder& textures, sf::RenderWindow& window)
     : m_window{ window },
       m_firstPlayerButton{ initializeFirstPlayerButton(font) },
       m_secondPlayerButton{ initializeSecondPlayerButton(font) },
-      m_firstPlayer{ ChipColor::white, textures },
-      m_secondPlayer{ ChipColor::black, textures },
       m_sprite{ textures.get(Textures::ID::board) },
       m_playerTurn{ PlayerTurn::firstPlayerTurn },
       m_game{ textures }
@@ -53,34 +51,42 @@ void Board::handleEvent(const sf::Event& event)
         return;
 
     if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
-        m_game.isDiceThrowState()) {
+        m_game.isDiceThrowState())
+    {
         m_game.setDolbaeb(false);
-        if (m_firstPlayerButton.isClicked(event, m_window)) {
+        if (m_firstPlayerButton.isClicked(event, m_window))
+        {
             // std::cout << "first player threw: ";
             m_game.setDices();
-            std::string str = std::to_string(m_game.getDice1()) + ' ' + std::to_string(m_game.getDice2());
+            std::string str = std::to_string(m_game.getDice1()) + ' ' +
+                              std::to_string(m_game.getDice2());
             m_firstPlayerButton.setText(str);
         }
     }
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
-             m_game.isDiceThrowState()) {
+             m_game.isDiceThrowState())
+    {
         m_game.setDolbaeb(true);
-        if (m_secondPlayerButton.isClicked(event, m_window)) {
+        if (m_secondPlayerButton.isClicked(event, m_window))
+        {
             m_game.setDices();
-            std::string str = std::to_string(m_game.getDice1()) + ' ' + std::to_string(m_game.getDice2());
+            std::string str = std::to_string(m_game.getDice1()) + ' ' +
+                              std::to_string(m_game.getDice2());
             m_secondPlayerButton.setText(str);
         }
     }
     else if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
-             m_game.isChipChooseState()) {
+             m_game.isChipChooseState())
+    {
         std::cout << "first player choosing chips\n";
         m_game.chooseChip(event, m_window, m_playerTurn);
     }
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
-            m_game.isChipChooseState())
+             m_game.isChipChooseState())
         m_game.chooseChip(event, m_window, m_playerTurn);
     else if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
-        m_game.isMoveState()){
+             m_game.isMoveState())
+    {
         std::cout << "first player move chips\n";
         m_game.handleChipMovement(event, m_window, m_playerTurn);
     }

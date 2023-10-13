@@ -3,8 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "states/StateStack.hpp"
 #include "ResourceHolder.hpp"
+#include "states/StateStack.hpp"
 
 class Application
 {

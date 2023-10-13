@@ -7,4 +7,4 @@ enum class MoveCount
     true_move
 };
 
-#endif //MOVE_COUNT_HPP
+#endif  // MOVE_COUNT_HPP

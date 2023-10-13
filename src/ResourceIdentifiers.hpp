@@ -27,4 +27,4 @@ class ResourceHolder;
 using TextureHolder = ResourceHolder<sf::Texture, Textures::ID>;
 using FontHolder = ResourceHolder<sf::Font, Fonts::ID>;
 
-#endif  //RESOURCE_IDENTIFIERS_HPP
+#endif  // RESOURCE_IDENTIFIERS_HPP

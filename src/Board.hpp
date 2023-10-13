@@ -24,12 +24,10 @@ private:
     sf::RenderWindow& m_window;
     Button m_firstPlayerButton;
     Button m_secondPlayerButton;
-    Player m_firstPlayer;
-    Player m_secondPlayer;
     sf::Sprite m_sprite;
 
-    Game m_game;
     PlayerTurn m_playerTurn;
+    Game m_game;
 
     void drawPlayerChips(const Player& player, sf::RenderWindow& window);
 };

@@ -1,7 +1,8 @@
 #include "Chip.hpp"
 
-#include "Constants.hpp"
 #include <iostream>
+
+#include "Constants.hpp"
 
 Textures::ID toTextureID(ChipColor color)
 {
@@ -16,9 +17,9 @@ Textures::ID toTextureID(ChipColor color)
     }
 }
 
-Chip::Chip(const sf::Vector2f& position, ChipColor color, const TextureHolder& textures)
-    : m_color{ color },
-      m_chipCircle{}
+Chip::Chip(const sf::Vector2f& position, ChipColor color,
+           const TextureHolder& textures)
+    : m_color{ color }, m_chipCircle{}
 {
     m_chipCircle.setPosition(position);
     m_chipCircle.setTexture(textures.get(toTextureID(m_color)));

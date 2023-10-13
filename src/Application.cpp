@@ -1,8 +1,8 @@
 #include "Application.hpp"
 
-#include "Constants.hpp"
-
 #include <iostream>
+
+#include "Constants.hpp"
 
 FontHolder initializeFonts()
 {
@@ -21,7 +21,9 @@ TextureHolder initializeTextures()
 }
 
 Application::Application()
-    : m_window{ sf::VideoMode{ constants::windowWidth, constants::windowHeight }, "backgammon", sf::Style::Fullscreen },
+    : m_window{ sf::VideoMode{ constants::windowWidth,
+                               constants::windowHeight },
+                "backgammon", sf::Style::Fullscreen },
       m_textures{ initializeTextures() },
       m_fonts{ initializeFonts() },
       m_stateStack{ State::Context{ m_window, m_textures, m_fonts } }
@@ -48,7 +50,8 @@ void Application::processInput()
     sf::Event event{};
     while (m_window.pollEvent(event))
     {
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+        if (event.type == sf::Event::KeyPressed &&
+            event.key.code == sf::Keyboard::Escape)
             m_window.close();
 
         if (event.type == sf::Event::Closed)
@@ -57,8 +60,8 @@ void Application::processInput()
         if (event.type == sf::Event::MouseButtonPressed &&
             event.mouseButton.button == sf::Mouse::Left)
         {
-            // std::cout << "x, y: " << sf::Mouse::getPosition(m_window).x << ' ' <<
-                // sf::Mouse::getPosition(m_window).y << '\n';
+            // std::cout << "x, y: " << sf::Mouse::getPosition(m_window).x << '
+            // ' << sf::Mouse::getPosition(m_window).y << '\n';
         }
 
         m_stateStack.handleEvent(event);
