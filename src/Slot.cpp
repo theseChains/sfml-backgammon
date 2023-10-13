@@ -87,10 +87,8 @@ void Slot::clearChips()
 
 void Slot::drawChips(sf::RenderWindow& window)
 {
-    for (int i{ 0 }; i < m_chips.size(); ++i)
-    {
+    for (std::size_t i{ 0 }; i < m_chips.size(); ++i)
         m_chips[i].draw(window);
-    }
 }
 
 void Slot::drawSlotBounds(sf::RenderWindow& window, int index)

@@ -21,8 +21,7 @@ public:
     int getDice1();
     int getDice2();
     void setDolbaeb(bool fl);
-    void chooseChip(const sf::Event& event, sf::RenderWindow& window,
-                    PlayerTurn turn);
+    void chooseChip(const sf::Event& event, sf::RenderWindow& window);
     void handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
                             PlayerTurn& turn);
     MoveCount moveIsValid(int slotMovedFromIndex, int slotMovedToIndex,

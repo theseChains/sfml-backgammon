@@ -5,7 +5,6 @@
 
 #include "Button.hpp"
 #include "Game.hpp"
-#include "Player.hpp"
 #include "PlayerTurn.hpp"
 #include "ResourceHolder.hpp"
 #include "ResourceIdentifiers.hpp"
@@ -28,8 +27,6 @@ private:
 
     PlayerTurn m_playerTurn;
     Game m_game;
-
-    void drawPlayerChips(const Player& player, sf::RenderWindow& window);
 };
 
 #endif

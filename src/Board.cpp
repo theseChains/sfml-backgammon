@@ -79,11 +79,11 @@ void Board::handleEvent(const sf::Event& event)
              m_game.isChipChooseState())
     {
         std::cout << "first player choosing chips\n";
-        m_game.chooseChip(event, m_window, m_playerTurn);
+        m_game.chooseChip(event, m_window);
     }
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
              m_game.isChipChooseState())
-        m_game.chooseChip(event, m_window, m_playerTurn);
+        m_game.chooseChip(event, m_window);
     else if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
              m_game.isMoveState())
     {
@@ -101,11 +101,4 @@ void Board::draw()
     m_firstPlayerButton.draw(m_window);
     m_secondPlayerButton.draw(m_window);
     m_game.draw(m_window);
-}
-
-void Board::drawPlayerChips(const Player& player, sf::RenderWindow& window)
-{
-    PlayerChips playerChips{ player.getChips() };
-    for (std::size_t i = 0; i < constants::numberOfChips; ++i)
-        playerChips[i].draw(window);
 }

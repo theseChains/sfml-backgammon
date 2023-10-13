@@ -18,10 +18,10 @@ Button::Button(ButtonInfo& buttonInfo, const sf::Font& font)
 bool Button::isClicked(const sf::Event& event, sf::RenderWindow& window)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-    float startX{ m_buttonInfo.position.x };
-    float endX{ m_buttonInfo.position.x + m_buttonInfo.size.x };
-    float startY{ m_buttonInfo.position.y };
-    float endY{ m_buttonInfo.position.y + m_buttonInfo.size.y };
+    int startX{ static_cast<int>(m_buttonInfo.position.x) };
+    int endX{ static_cast<int>(m_buttonInfo.position.x + m_buttonInfo.size.x) };
+    int startY{ static_cast<int>(m_buttonInfo.position.y) };
+    int endY{ static_cast<int>(m_buttonInfo.position.y + m_buttonInfo.size.y) };
     if (startX <= mousePosition.x && mousePosition.x <= endX &&
         startY <= mousePosition.y && mousePosition.y <= endY &&
         event.type == sf::Event::MouseButtonPressed &&

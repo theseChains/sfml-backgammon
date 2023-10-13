@@ -21,6 +21,8 @@ StatePtr StateStack::createState(States::ID stateID)
             return std::make_unique<GameState>(*this, m_context);
         case States::ID::none:
             throw std::runtime_error{ "StateStack::createState() - State::ID::none passed to creation" };
+        default:
+            throw std::runtime_error{ "StateStack::createState() - unknown stateID" };
     }
 }
 

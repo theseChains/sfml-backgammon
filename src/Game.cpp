@@ -108,9 +108,12 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex,
     }
 
     if (ret != MoveCount::no_move &&
-        (slotMovedFromIndex == 0 && color == ChipColor::white ||
-         slotMovedFromIndex == 12 && color == ChipColor::black))
+        ((slotMovedFromIndex == 0 && color == ChipColor::white) ||
+         (slotMovedFromIndex == 12 && color == ChipColor::black)))
+    {
         was_taken_from_head = true;
+    }
+
     return ret;
 }
 
@@ -120,8 +123,7 @@ bool Game::SlotsSameColor(int from_, int to_)
            slots[to_].getChipColor() == ChipColor::jopa_timura;
 }
 
-void Game::chooseChip(const sf::Event& event, sf::RenderWindow& window,
-                      PlayerTurn turn)
+void Game::chooseChip(const sf::Event& event, sf::RenderWindow& window)
 {
     slot_index_take = GetSlotIndex(event, window);
     // std::cout << "chosen slot index: " << slot_index_take << '\n';
@@ -207,13 +209,13 @@ void Game::updateSlotChips(Slot& slot, int slotIndex)
     {
         if (slotIndex < 12)
             slot.pushChip(
-                { { xLeft, yStart - i * constants::ChipDiam /
+                { { xLeft, yStart - static_cast<float>(i) * constants::ChipDiam /
                                         getShrinkageConstant(numberOfChips) },
                   chipColor,
                   m_textures });
         else
             slot.pushChip(
-                { { xLeft, yStart + i * constants::ChipDiam /
+                { { xLeft, yStart + static_cast<float>(i) * constants::ChipDiam /
                                         getShrinkageConstant(numberOfChips) },
                   chipColor,
                   m_textures });
@@ -235,7 +237,7 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
         color = ChipColor::white;
     else
         color = ChipColor::black;
-    if (slots[slot_index_take].getChipColor() != color)
+    if (slots[slot_index_take].getChipColor() != color || slot_index_drop == -1)
     {
         m_chipChooseState = true;
         m_moveState = false;
@@ -277,25 +279,25 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
 
 void Game::SlotInit()
 {
-    for (int i = 0; i < constants::numberOfSlots; ++i)
+    for (int i{ 0 }; i < constants::numberOfSlots; ++i)
     {
         if (i < 6)
         {
-            slots[i].setBounds(170 + constants::SlotWidth * i,
-                               1045 - constants::SlotHeight);
+            slots[i].setBounds(170.0f + constants::SlotWidth * static_cast<float>(i),
+                               1045.0f - constants::SlotHeight);
         }
         else if (i >= 6 && i < 12)
         {
-            slots[i].setBounds(1005 + constants::SlotWidth * (i - 6),
-                               1045 - constants::SlotHeight);
+            slots[i].setBounds(1005.0f + constants::SlotWidth * static_cast<float>(i - 6),
+                               1045.0f - constants::SlotHeight);
         }
         else if (i >= 12 && i < 18)
         {
-            slots[i].setBounds(1630 + constants::SlotWidth * (12 - i), 40);
+            slots[i].setBounds(1630.0f + constants::SlotWidth * static_cast<float>(12 - i), 40.0f);
         }
         else
         {
-            slots[i].setBounds(795 + constants::SlotWidth * (18 - i), 40);
+            slots[i].setBounds(795.0f + constants::SlotWidth * static_cast<float>(18 - i), 40.0f);
         }
         slots[i].setChipColor(ChipColor::jopa_timura);
         slots[i].setChipsCount(0);
@@ -316,7 +318,7 @@ void Game::StartPosition(const TextureHolder& textures)
     for (int i{ 0 }; i < constants::numberOfChips; ++i)
     {
         Chip whiteChip{ { 170.0f,
-                          920.0f - i * constants::ChipDiam /
+                          920.0f - static_cast<float>(i) * constants::ChipDiam /
                                        constants::firstChipDistanceConstant },
                         ChipColor::white,
                         textures };
@@ -325,7 +327,7 @@ void Game::StartPosition(const TextureHolder& textures)
     for (int i{ 0 }; i < constants::numberOfChips; ++i)
     {
         Chip blackChip{ { 1620.0f,
-                          30.0f + i * constants::ChipDiam /
+                          30.0f + static_cast<float>(i) * constants::ChipDiam /
                                       constants::firstChipDistanceConstant },
                         ChipColor::black,
                         textures };
@@ -369,7 +371,7 @@ void Game::ChangeHeight(int slotID)
 {
     int numberOfChips{ slots[slotID].getChipsCount() };
     float currentHeight{ slots[slotID].getHeight() };
-    float newHeight{ numberOfChips * constants::ChipDiam /
+    float newHeight{ static_cast<float>(numberOfChips) * constants::ChipDiam /
                      getShrinkageConstant(numberOfChips) };
     if (numberOfChips == 0)
         newHeight = 500.0f;
