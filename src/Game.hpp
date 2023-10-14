@@ -41,6 +41,9 @@ public:
     void setMoveState(bool moveState);
     void setDiceThrowState(bool diceThrowState);
     void setChipChooseState(bool chipChooseState);
+    bool home(ChipColor col);
+    void change_states();
+    MoveCount home_play(ChipColor color, int slotfrom);
 
     void draw(sf::RenderWindow& window);
 

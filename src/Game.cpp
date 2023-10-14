@@ -63,6 +63,8 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex,
     else
         no_head_problem = !was_taken_from_head + slotMovedFromIndex;
 
+    bool home_state = home(color);
+
     bool are_to_and_from_same =
         SlotsSameColor(slotMovedFromIndex, slotMovedToIndex);
     //не дубль
@@ -207,17 +209,35 @@ bool Game::CheckMoves(PlayerTurn & turn){
     if(count == 15) break;
   }
   if(!res){
-    m_chipChooseState = false;
-    m_moveState = false;
-    m_diceThrowState = true;
-    was_taken_from_head = false;
-    dubl = false;
+    change_states();
     turn =
       (turn == PlayerTurn::firstPlayerTurn ? PlayerTurn::secondPlayerTurn
                               : PlayerTurn::firstPlayerTurn);
     dice_1 = dice_2 = dice_3 = dice_4 = 0;
   }
   return res;
+}
+
+bool Game::home(ChipColor col){
+    bool res = 0;
+    int count = 0;
+   if (col == ChipColor::black)
+    {
+        for (int i = 18; i <= 23; i++)
+        {
+            if (slots[i].getChipColor() == ChipColor::black)
+                count++;
+        }
+    }
+    else if(col == ChipColor::white){
+         for (int i = 6; i <= 11; i++)
+        {
+            if (slots[i].getChipColor() == ChipColor::white)
+                count++;
+        }
+    }
+    if(count == 15) res = 1;
+    return res;
 }
 
 float getShrinkageConstant(int numberOfChips)
@@ -272,7 +292,7 @@ void Game::moveChip()
 
 void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
                               PlayerTurn& turn)
-{ 
+{
     slot_index_drop = GetSlotIndex(event, window);
     ChipColor color;
     if (turn == PlayerTurn::firstPlayerTurn)
@@ -280,14 +300,21 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
     else
         color = ChipColor::black;
 
+    bool home_state = home(color);
+
     if (slots[slot_index_take].getChipColor() != color || slot_index_drop == -1)
     {
         m_chipChooseState = true;
         m_moveState = false;
         return;
     }
+    MoveCount temp = MoveCount::no_move;
+    if(home && (slot_index_drop == 24 || slot_index_drop == 25)){
+        temp = home_play(color, slot_index_take);
+        slots[slot_index_drop].incrementChipCount();
+    }
     
-    MoveCount temp = moveIsValid(slot_index_take, slot_index_drop, color);
+    if(temp == MoveCount::no_move) moveIsValid(slot_index_take, slot_index_drop, color);
     if (temp != MoveCount::no_move)
     {
         slots[slot_index_drop].setChipColor(
@@ -305,11 +332,7 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
 
     if (!dice_1 && !dice_2 && !dice_3 && !dice_4)
     {
-        m_chipChooseState = false;
-        m_moveState = false;
-        m_diceThrowState = true;
-        was_taken_from_head = false;
-        dubl = false;
+        change_states();
         turn =
             (turn == PlayerTurn::firstPlayerTurn ? PlayerTurn::secondPlayerTurn
                                                  : PlayerTurn::firstPlayerTurn);
@@ -319,6 +342,44 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
         m_chipChooseState = true;
         m_moveState = false;
     }
+}
+
+void Game::change_states(){
+    m_chipChooseState = false;
+    m_moveState = false;
+    m_diceThrowState = true;
+    was_taken_from_head = false;
+    dubl = false;
+}
+
+MoveCount Game::home_play(ChipColor color, int slotfrom){
+    MoveCount ret;
+    int num = 0;
+    if (color == ChipColor::white) num = 12;
+    else num = 24;
+    if(num - slotfrom == dice_1){
+        dice_1 = 0;
+        ret = MoveCount::true_move;
+    }
+    else if(num - slotfrom == dice_2){
+        dice_2 = 0;
+        ret = MoveCount::true_move;
+    }
+    else if(num - slotfrom == dice_1 + dice_2){
+        dice_1 = dice_2 = 0;
+        ret = MoveCount::true_move;
+    }
+    else if(dubl){
+        if(num - slotfrom == dice_1 * 3){
+            dice_1 = dice_2 = dice_3 = 0;
+            ret = MoveCount::true_move;
+        }
+        else if(num - slotfrom == dice_1 * 4){
+             dice_1 = dice_2 = dice_3 = dice_4 = 0;
+            ret = MoveCount::true_move;
+        }
+    }
+    return ret;
 }
 
 void Game::SlotInit()
