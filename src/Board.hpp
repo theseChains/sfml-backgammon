@@ -25,6 +25,7 @@ private:
     Button m_firstPlayerButton;
     Button m_secondPlayerButton;
     sf::Sprite m_sprite;
+    TextureHolder& m_textures;
 
     PlayerTurn m_playerTurn;
     Game m_game;

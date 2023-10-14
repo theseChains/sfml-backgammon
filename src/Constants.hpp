@@ -1,6 +1,10 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include "ResourceIdentifiers.hpp"
+
+#include <unordered_map>
+
 namespace constants
 {
     inline constexpr int windowWidth{ 1920 };
@@ -16,6 +20,15 @@ namespace constants
     inline constexpr float firstChipDistanceConstant{ 4.5 };
 
     inline constexpr int lowerBound{ 1044 };
+
+    inline std::unordered_map<int, Textures::ID> textureMap{
+        { 1, Textures::ID::diceOne },
+        { 2, Textures::ID::diceTwo },
+        { 3, Textures::ID::diceThree },
+        { 4, Textures::ID::diceFour },
+        { 5, Textures::ID::diceFive },
+        { 6, Textures::ID::diceSix }
+    };
 };
 
 #endif

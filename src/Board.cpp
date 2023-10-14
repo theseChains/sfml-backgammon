@@ -67,6 +67,7 @@ Board::Board(sf::Font& font, TextureHolder& textures, sf::RenderWindow& window)
       m_firstPlayerButton{ initializeFirstPlayerButton(font) },
       m_secondPlayerButton{ initializeSecondPlayerButton(font) },
       m_sprite{ textures.get(Textures::ID::board) },
+      m_textures{ textures },
       m_playerTurn{ PlayerTurn::firstPlayerTurn },
       m_game{ textures },
       m_firstPlayerDices{ initializeFirstPlayerDices(textures) },
@@ -82,6 +83,7 @@ void Board::handleEvent(const sf::Event& event)
     if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
         m_game.isDiceThrowState())
     {
+        std::cout << "first player throwing\n";
         m_game.setDolbaeb(false);
         if (m_firstPlayerButton.isClicked(event, m_window))
         {
@@ -89,11 +91,16 @@ void Board::handleEvent(const sf::Event& event)
             m_showDices = true;
             int firstDice{ m_game.getDice1() };
             int secondDice{ m_game.getDice2() };
+            m_firstPlayerDices.first.setTexture(
+                    m_textures.get(constants::textureMap[firstDice]));
+            m_firstPlayerDices.second.setTexture(
+                    m_textures.get(constants::textureMap[secondDice]));
         }
     }
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
              m_game.isDiceThrowState())
     {
+        std::cout << "second player throwing\n";
         m_game.setDolbaeb(true);
         if (m_secondPlayerButton.isClicked(event, m_window))
         {
@@ -101,6 +108,10 @@ void Board::handleEvent(const sf::Event& event)
             m_game.setDices();
             int firstDice{ m_game.getDice1() };
             int secondDice{ m_game.getDice2() };
+            m_secondPlayerDices.first.setTexture(
+                    m_textures.get(constants::textureMap[firstDice]));
+            m_secondPlayerDices.second.setTexture(
+                    m_textures.get(constants::textureMap[secondDice]));
         }
     }
     else if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
@@ -111,15 +122,20 @@ void Board::handleEvent(const sf::Event& event)
     }
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
              m_game.isChipChooseState())
+    {
+        std::cout << "second player choosing chips\n";
         m_game.chooseChip(event, m_window);
+    }
     else if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
              m_game.isMoveState())
     {
+        std::cout << "first player choosing chips\n";
         m_game.handleChipMovement(event, m_window, m_playerTurn);
     }
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
              m_game.isMoveState())
     {
+        std::cout << "second player choosing chips\n";
         m_game.handleChipMovement(event, m_window, m_playerTurn);
     }
 }

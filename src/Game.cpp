@@ -180,6 +180,8 @@ bool Game::SexChips(int slotMovedToIndex, ChipColor col)
 }
 
 bool Game::CheckMoves(PlayerTurn & turn){
+    if (dice_1 == 0 && dice_2 == 0 && dice_3 == 0 && dice_4 == 0)
+        return false;
   ChipColor oppoz_col;
   int count = 0;
   bool res = 0;
@@ -213,6 +215,7 @@ bool Game::CheckMoves(PlayerTurn & turn){
     turn =
       (turn == PlayerTurn::firstPlayerTurn ? PlayerTurn::secondPlayerTurn
                               : PlayerTurn::firstPlayerTurn);
+    dice_1 = dice_2 = dice_3 = dice_4 = 0;
   }
   return res;
 }
@@ -227,7 +230,6 @@ float getShrinkageConstant(int numberOfChips)
         int heightOfChips{ numberOfChips * (constants::ChipDiam + 20) };
         shrinkageConstant = static_cast<float>(heightOfChips) /
                             static_cast<float>(constants::SlotHeight);
-        std::cout << "shrinkageConstant: " << shrinkageConstant << '\n';
     }
 
     return shrinkageConstant;
