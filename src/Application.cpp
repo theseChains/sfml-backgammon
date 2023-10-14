@@ -14,9 +14,17 @@ FontHolder initializeFonts()
 TextureHolder initializeTextures()
 {
     TextureHolder textures{};
+
     textures.load(Textures::ID::whiteChip, "../res/whiteChip.png");
     textures.load(Textures::ID::blackChip, "../res/blackChip.png");
     textures.load(Textures::ID::board, "../res/board.png");
+    textures.load(Textures::ID::diceOne, "../res/diceOne.png");
+    textures.load(Textures::ID::diceTwo, "../res/diceTwo.png");
+    textures.load(Textures::ID::diceThree, "../res/diceThree.png");
+    textures.load(Textures::ID::diceFour, "../res/diceFour.png");
+    textures.load(Textures::ID::diceFive, "../res/diceFive.png");
+    textures.load(Textures::ID::diceSix, "../res/diceSix.png");
+
     return textures;
 }
 
@@ -41,8 +49,14 @@ void Application::run()
     while (m_window.isOpen())
     {
         processInput();
+        update();
         draw();
     }
+}
+
+void Application::update()
+{
+    m_stateStack.update();
 }
 
 void Application::processInput()

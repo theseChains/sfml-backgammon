@@ -20,6 +20,7 @@ private:
     StateStack m_stateStack;
 
     void processInput();
+    void update();
     void draw();
 };
 

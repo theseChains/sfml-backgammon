@@ -17,6 +17,7 @@ public:
     void initializeButtons(const sf::Font& font);
     void handleButtonClick(const sf::Event& event, Button& button);
     void handleEvent(const sf::Event& event);
+    void update();
     void draw();
 
 private:
@@ -27,6 +28,10 @@ private:
 
     PlayerTurn m_playerTurn;
     Game m_game;
+
+    std::pair<sf::Sprite, sf::Sprite> m_firstPlayerDices;
+    std::pair<sf::Sprite, sf::Sprite> m_secondPlayerDices;
+    bool m_showDices;
 };
 
 #endif

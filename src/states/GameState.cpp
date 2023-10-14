@@ -11,6 +11,11 @@ void GameState::draw()
     m_board.draw();
 }
 
+void GameState::update()
+{
+    m_board.update();
+}
+
 bool GameState::handleEvent(const sf::Event& event)
 {
     m_board.handleEvent(event);

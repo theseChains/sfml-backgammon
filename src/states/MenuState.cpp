@@ -18,6 +18,10 @@ void MenuState::draw()
     m_playButton.draw(window);
 }
 
+void MenuState::update()
+{
+}
+
 bool MenuState::handleEvent(const sf::Event& event)
 {
     if (m_playButton.isClicked(event, *getContext().m_window))

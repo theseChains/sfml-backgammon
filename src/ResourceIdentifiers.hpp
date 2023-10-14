@@ -9,7 +9,13 @@ namespace Textures
     {
         whiteChip,
         blackChip,
-        board
+        board,
+        diceOne, 
+        diceTwo,
+        diceThree,
+        diceFour,
+        diceFive,
+        diceSix
     };
 }
 

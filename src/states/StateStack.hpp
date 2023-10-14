@@ -20,6 +20,7 @@ public:
     StatePtr createState(States::ID stateID);
 
     void draw();
+    void update();
     void handleEvent(const sf::Event& event);
 
     void pushState(States::ID stateID);

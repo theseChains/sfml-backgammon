@@ -10,6 +10,7 @@ public:
     GameState(StateStack& stack, Context context);
 
     void draw() override;
+    void update() override;
     bool handleEvent(const sf::Event& event) override;
 
 private:

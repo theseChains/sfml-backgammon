@@ -128,7 +128,7 @@ bool Game::SlotsSameColor(int from_, int to_)
 void Game::chooseChip(const sf::Event& event, sf::RenderWindow& window)
 {
     slot_index_take = GetSlotIndex(event, window);
-    // std::cout << "chosen slot index: " << slot_index_take << '\n';
+    // should do a fix here i think 
     if (slot_index_take != -1)
     {
         m_chipChooseState = false;
@@ -194,7 +194,7 @@ bool Game::CheckMoves(PlayerTurn & turn){
   int i;
   if (was_taken_from_head) i = 1;
   else i = 0;
-  for(i; i < 24; i++){
+  for(; i < 24; i++){
     if(slots[i].getChipColor() == col){
       count++;
       if((dice_1 != 0 && slots[(dice_1 + i) % 24].getChipColor() != oppoz_col) ||
@@ -441,28 +441,6 @@ void Game::ChangeHeight(int slotID)
         else if (currentHeight > newHeight)
             slots[slotID].setHeight(currentHeight - heightDifference);
     }
-
-    std::cout << "slot id: " << slotID
-              << " height: " << slots[slotID].getHeight()
-              << "ytop: " << slots[slotID].getYTop() << '\n';
-    // if (slots[slot_id].getBounds().intersects(slots[23 -
-    // slot_id].getBounds())){ int raznica = std::abs(slots[slot_id].getHeight()
-    // - slots[23 - slot_id].getHeight()); std::cout << "slot id: " << slot_id
-    // << " difference: " << raznica << '\n'; if (slot_id < 12)
-    //{
-    // slots[slot_id].setYTop(slots[slot_id].getYTop() + raznica / 2);
-    // slots[slot_id].setHeight(slots[slot_id].getHeight() - raznica / 2);
-    // slots[23 - slot_id].setHeight(slots[23 - slot_id].getHeight() - raznica /
-    // 2);
-    //}
-    // else
-    //{
-    // slots[slot_id].setHeight(slots[slot_id].getHeight() - raznica / 2);
-    // slots[23 - slot_id].setYTop(slots[23 - slot_id].getYTop() + raznica / 2);
-    // slots[23 - slot_id].setHeight(slots[23 - slot_id].getHeight() - raznica /
-    // 2);
-    //}
-    //}
 }
 
 bool Game::isMoveState() const

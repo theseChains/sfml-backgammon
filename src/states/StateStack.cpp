@@ -34,6 +34,14 @@ void StateStack::draw()
     }
 }
 
+void StateStack::update()
+{
+    for (auto& state : m_stack)
+    {
+        state->update();
+    }
+}
+
 void StateStack::pushState(States::ID stateID)
 {
     m_pendingChanges.push_back(PendingChange(Action::push, stateID));
