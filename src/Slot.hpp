@@ -18,6 +18,7 @@ public:
     sf::FloatRect getBounds();
     void setBounds(float x_left, float y_top);
     void setHeight(float height);
+    void setWidth(float width);
     int getChipsCount();
     void setChipsCount(int count);
     ChipColor getChipColor();

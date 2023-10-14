@@ -74,8 +74,7 @@ void Application::processInput()
         if (event.type == sf::Event::MouseButtonPressed &&
             event.mouseButton.button == sf::Mouse::Left)
         {
-            // std::cout << "x, y: " << sf::Mouse::getPosition(m_window).x << '
-            // ' << sf::Mouse::getPosition(m_window).y << '\n';
+            std::cout << "x, y: " << sf::Mouse::getPosition(m_window).x << ' ' << sf::Mouse::getPosition(m_window).y << '\n';
         }
 
         m_stateStack.handleEvent(event);

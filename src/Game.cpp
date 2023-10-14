@@ -11,7 +11,7 @@ Game::Game(TextureHolder& textures) : m_textures{ textures }
 int Game::GetSlotIndex(const sf::Event& event, sf::RenderWindow& window)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-    for (int i = 0; i < constants::numberOfSlots; ++i)
+    for (int i = 0; i < constants::numberOfSlots + 2; ++i)
     {
         // std::cout << "slot x, w, y, h: " << slots[i].getXLeft() << ' ' <<
         // constants::SlotWidth + slots[i].getXLeft() << ' ' <<
@@ -309,14 +309,18 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
         return;
     }
     MoveCount temp = MoveCount::no_move;
-    if(home && (slot_index_drop == 24 || slot_index_drop == 25)){
+    std::cout << "slot take id " << slot_index_take << '\n';
+    std::cout << "slot drop id " << slot_index_drop << '\n';
+    if(home_state && (slot_index_drop == 24 || slot_index_drop == 25)){
         temp = home_play(color, slot_index_take);
-        slots[slot_index_drop].incrementChipCount();
     }
     
-    if(temp == MoveCount::no_move) moveIsValid(slot_index_take, slot_index_drop, color);
+    std::cout << "temp: " << (temp == MoveCount::no_move ? "no move\n" : "true move\n");
+    if(temp == MoveCount::no_move && slot_index_drop != 24 && slot_index_drop != 25) temp = moveIsValid(slot_index_take, slot_index_drop, color);
+    std::cout << "temp: " << (temp == MoveCount::no_move ? "no move\n" : "true move\n");
     if (temp != MoveCount::no_move)
     {
+        std::cout << "moving chip\n";
         slots[slot_index_drop].setChipColor(
             slots[slot_index_take].getChipColor());
         slots[slot_index_drop].incrementChipCount();
@@ -352,16 +356,28 @@ void Game::change_states(){
     dubl = false;
 }
 
+bool Game::checkForEmptySlots(int num, int dice)
+{
+    bool flag = false;
+    for (int i{ num - dice }; i < num - 6; ++i)
+    {
+        if (slots[i].getChipColor() == ChipColor::jopa_timura)
+            flag = true;
+    }
+
+    return flag;
+}
+
 MoveCount Game::home_play(ChipColor color, int slotfrom){
-    MoveCount ret;
+    MoveCount ret = MoveCount::no_move;
     int num = 0;
     if (color == ChipColor::white) num = 12;
     else num = 24;
-    if(num - slotfrom == dice_1){
+    if(num - slotfrom == dice_1 || checkForEmptySlots(num, dice_1)){
         dice_1 = 0;
         ret = MoveCount::true_move;
     }
-    else if(num - slotfrom == dice_2){
+    else if(num - slotfrom == dice_2 || checkForEmptySlots(num, dice_1)) {
         dice_2 = 0;
         ret = MoveCount::true_move;
     }
@@ -407,6 +423,18 @@ void Game::SlotInit()
         slots[i].setChipColor(ChipColor::jopa_timura);
         slots[i].setChipsCount(0);
     }
+
+    slots[constants::whiteAssemblySlotIndex].setBounds(40.0f, 40.0f);
+    slots[constants::whiteAssemblySlotIndex].setHeight(constants::assemblySlotHeight);
+    slots[constants::whiteAssemblySlotIndex].setWidth(constants::assemblySlotWidth);
+    slots[constants::whiteAssemblySlotIndex].setChipsCount(0);
+    slots[constants::whiteAssemblySlotIndex].setChipColor(ChipColor::jopa_timura);
+
+    slots[constants::blackAssemblySlotIndex].setBounds(1795.0f, 595.0f);
+    slots[constants::blackAssemblySlotIndex].setHeight(constants::assemblySlotHeight);
+    slots[constants::blackAssemblySlotIndex].setWidth(constants::assemblySlotWidth);
+    slots[constants::blackAssemblySlotIndex].setChipsCount(0);
+    slots[constants::blackAssemblySlotIndex].setChipColor(ChipColor::jopa_timura);
 }
 
 void Game::setDolbaeb(bool fl)
@@ -416,10 +444,10 @@ void Game::setDolbaeb(bool fl)
 
 void Game::StartPosition(const TextureHolder& textures)
 {
-    slots[0].setChipColor(ChipColor::white);
-    slots[0].setChipsCount(15);
-    slots[12].setChipColor(ChipColor::black);
-    slots[12].setChipsCount(15);
+    slots[11].setChipColor(ChipColor::black);
+    slots[11].setChipsCount(15);
+    slots[23].setChipColor(ChipColor::white);
+    slots[23].setChipsCount(15);
     for (int i{ 0 }; i < constants::numberOfChips; ++i)
     {
         Chip whiteChip{ { 170.0f,
@@ -427,7 +455,7 @@ void Game::StartPosition(const TextureHolder& textures)
                                        constants::firstChipDistanceConstant },
                         ChipColor::white,
                         textures };
-        slots[0].pushChip(whiteChip);
+        slots[23].pushChip(whiteChip);
     }
     for (int i{ 0 }; i < constants::numberOfChips; ++i)
     {
@@ -436,7 +464,7 @@ void Game::StartPosition(const TextureHolder& textures)
                                       constants::firstChipDistanceConstant },
                         ChipColor::black,
                         textures };
-        slots[12].pushChip(blackChip);
+        slots[11].pushChip(blackChip);
     }
     // ChangeHeight(0);
     // ChangeHeight(12);
@@ -548,7 +576,7 @@ void Game::draw(sf::RenderWindow& window)
 
 void Game::drawBounds(sf::RenderWindow& window)
 {
-    for (int i{ 0 }; i < constants::numberOfSlots; ++i)
+    for (int i{ 0 }; i < constants::numberOfSlots + 2; ++i)
     {
         slots[i].drawSlotBounds(window, i);
     }

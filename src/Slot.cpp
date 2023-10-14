@@ -38,6 +38,11 @@ void Slot::setHeight(float height)
     m_bounds.height = height;
 }
 
+void Slot::setWidth(float width)
+{
+    m_bounds.width = width;
+}
+
 int Slot::getChipsCount()
 {
     return m_chipCount;

@@ -15,6 +15,11 @@ namespace constants
     inline constexpr int SlotWidth{ 125 };
     inline constexpr int EbannayaPalka{ 85 };
 
+    inline constexpr int assemblySlotHeight{ 450 };
+    inline constexpr int assemblySlotWidth{ 90 };
+    inline constexpr int whiteAssemblySlotIndex{ 24 };
+    inline constexpr int blackAssemblySlotIndex{ 25 };
+
     inline constexpr int ChipDiam{ 125 };
 
     inline constexpr float firstChipDistanceConstant{ 4.5 };

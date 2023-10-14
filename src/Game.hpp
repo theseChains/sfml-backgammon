@@ -44,6 +44,7 @@ public:
     bool home(ChipColor col);
     void change_states();
     MoveCount home_play(ChipColor color, int slotfrom);
+    bool checkForEmptySlots(int num, int dice);
 
     void draw(sf::RenderWindow& window);
 
@@ -51,7 +52,7 @@ public:
     void drawBounds(sf::RenderWindow& window);
 
 private:
-    std::array<Slot, constants::numberOfSlots> slots;
+    std::array<Slot, constants::numberOfSlots + 2> slots;
     TextureHolder& m_textures;
     int dice_1, dice_2, dice_3, dice_4;
     Random rnd;
