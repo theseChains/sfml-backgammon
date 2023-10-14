@@ -30,8 +30,7 @@ private:
     PlayerTurn m_playerTurn;
     Game m_game;
 
-    std::pair<sf::Sprite, sf::Sprite> m_firstPlayerDices;
-    std::pair<sf::Sprite, sf::Sprite> m_secondPlayerDices;
+    std::pair<sf::Sprite, sf::Sprite> m_playerDices;
     bool m_showDices;
 };
 

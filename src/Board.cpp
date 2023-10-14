@@ -36,27 +36,13 @@ Button initializeSecondPlayerButton(sf::Font& font)
     return button;
 }
 
-std::pair<sf::Sprite, sf::Sprite>
-initializeFirstPlayerDices(TextureHolder& textures)
+std::pair<sf::Sprite, sf::Sprite> initializePlayerDices(TextureHolder& textures)
 {
     std::pair<sf::Sprite, sf::Sprite> dices{};
 
-    dices.first.setPosition(15.0f, 510.0f);
+    dices.first.setPosition(930.0f, 470.0f);
     dices.first.setTexture(textures.get(Textures::ID::diceOne));
-    dices.second.setPosition(80.0f, 510.0f);
-    dices.second.setTexture(textures.get(Textures::ID::diceTwo));
-
-    return dices;
-}
-
-std::pair<sf::Sprite, sf::Sprite>
-initializeSecondPlayerDices(TextureHolder& textures)
-{
-    std::pair<sf::Sprite, sf::Sprite> dices{};
-
-    dices.first.setPosition(1770.0f, 510.0f);
-    dices.first.setTexture(textures.get(Textures::ID::diceOne));
-    dices.second.setPosition(1835.0f, 510.0f);
+    dices.second.setPosition(930.0f, 550.0f);
     dices.second.setTexture(textures.get(Textures::ID::diceTwo));
 
     return dices;
@@ -70,8 +56,7 @@ Board::Board(sf::Font& font, TextureHolder& textures, sf::RenderWindow& window)
       m_textures{ textures },
       m_playerTurn{ PlayerTurn::firstPlayerTurn },
       m_game{ textures },
-      m_firstPlayerDices{ initializeFirstPlayerDices(textures) },
-      m_secondPlayerDices{ initializeSecondPlayerDices(textures) },
+      m_playerDices{ initializePlayerDices(textures) },
       m_showDices{ false }
 {
 }
@@ -91,9 +76,9 @@ void Board::handleEvent(const sf::Event& event)
             m_showDices = true;
             int firstDice{ m_game.getDice1() };
             int secondDice{ m_game.getDice2() };
-            m_firstPlayerDices.first.setTexture(
+            m_playerDices.first.setTexture(
                     m_textures.get(constants::textureMap[firstDice]));
-            m_firstPlayerDices.second.setTexture(
+            m_playerDices.second.setTexture(
                     m_textures.get(constants::textureMap[secondDice]));
         }
     }
@@ -108,9 +93,9 @@ void Board::handleEvent(const sf::Event& event)
             m_game.setDices();
             int firstDice{ m_game.getDice1() };
             int secondDice{ m_game.getDice2() };
-            m_secondPlayerDices.first.setTexture(
+            m_playerDices.first.setTexture(
                     m_textures.get(constants::textureMap[firstDice]));
-            m_secondPlayerDices.second.setTexture(
+            m_playerDices.second.setTexture(
                     m_textures.get(constants::textureMap[secondDice]));
         }
     }
@@ -151,15 +136,10 @@ void Board::draw()
     m_window.draw(m_sprite);
     m_firstPlayerButton.draw(m_window);
     m_secondPlayerButton.draw(m_window);
-    if (m_showDices && m_playerTurn == PlayerTurn::firstPlayerTurn)
+    if (m_showDices)
     {
-        m_window.draw(m_firstPlayerDices.first);
-        m_window.draw(m_firstPlayerDices.second);
-    }
-    else if (m_showDices && m_playerTurn == PlayerTurn::secondPlayerTurn)
-    {
-        m_window.draw(m_secondPlayerDices.first);
-        m_window.draw(m_secondPlayerDices.second);
+        m_window.draw(m_playerDices.first);
+        m_window.draw(m_playerDices.second);
     }
     m_game.draw(m_window);
 }
