@@ -221,19 +221,19 @@ bool Game::CheckMoves(PlayerTurn & turn){
 bool Game::home(ChipColor col){
     bool res = 0;
     int count = 0;
-   if (col == ChipColor::black)
+   if (col == ChipColor::white)
     {
         for (int i = 18; i <= 23; i++)
         {
-            if (slots[i].getChipColor() == ChipColor::black)
-                count++;
+            if (slots[i].getChipColor() == ChipColor::white)
+                count += slots[i].getChipsCount();
         }
     }
-    else if(col == ChipColor::white){
+    else if(col == ChipColor::black){
          for (int i = 6; i <= 11; i++)
         {
-            if (slots[i].getChipColor() == ChipColor::white)
-                count++;
+            if (slots[i].getChipColor() == ChipColor::black)
+                count += slots[i].getChipsCount();
         }
     }
     if(count == 15) res = 1;
@@ -309,9 +309,10 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
         return;
     }
     MoveCount temp = MoveCount::no_move;
-    std::cout << "slot take id " << slot_index_take << '\n';
-    std::cout << "slot drop id " << slot_index_drop << '\n';
+    std::cout << "home: " << home_state << '\n';
     if(home_state && (slot_index_drop == 24 || slot_index_drop == 25)){
+        std::cout << "slot take id " << slot_index_take << '\n';
+        std::cout << "slot drop id " << slot_index_drop << '\n';
         temp = home_play(color, slot_index_take);
     }
     
@@ -377,7 +378,7 @@ MoveCount Game::home_play(ChipColor color, int slotfrom){
         dice_1 = 0;
         ret = MoveCount::true_move;
     }
-    else if(num - slotfrom == dice_2 || checkForEmptySlots(num, dice_1)) {
+    else if(num - slotfrom == dice_2 || checkForEmptySlots(num, dice_2)) {
         dice_2 = 0;
         ret = MoveCount::true_move;
     }
@@ -395,6 +396,7 @@ MoveCount Game::home_play(ChipColor color, int slotfrom){
             ret = MoveCount::true_move;
         }
     }
+    std::cout << "ret: " << (ret == MoveCount::no_move ? "no move\n" : "true move\n");
     return ret;
 }
 
