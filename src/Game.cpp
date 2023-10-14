@@ -223,7 +223,7 @@ bool Game::home(ChipColor col){
     int count = 0;
    if (col == ChipColor::white)
     {
-        for (int i = 18; i <= 23; i++)
+        for (int i = 18; i <= 24; i++)
         {
             if (slots[i].getChipColor() == ChipColor::white)
                 count += slots[i].getChipsCount();
@@ -235,6 +235,7 @@ bool Game::home(ChipColor col){
             if (slots[i].getChipColor() == ChipColor::black)
                 count += slots[i].getChipsCount();
         }
+         count += slots[25].getChipsCount();
     }
     if(count == 15) res = 1;
     return res;
@@ -360,11 +361,18 @@ void Game::change_states(){
 bool Game::checkForEmptySlots(int num, int dice)
 {
     bool flag = false;
-    for (int i{ num - dice }; i < num - 6; ++i)
+    int countOfEmpty = 0;
+    for (int i{ num - 6 }; i <= num - dice; ++i)
     {
+        std::cout << "slot index: " << i << '\n';
         if (slots[i].getChipColor() == ChipColor::jopa_timura)
-            flag = true;
+            ++countOfEmpty;
     }
+    std::cout << "count of empty: " << countOfEmpty << '\n';
+    if (countOfEmpty == 7 - dice)
+        flag = true;
+
+    std::cout << "check for empty flag: " << flag << '\n';
 
     return flag;
 }
@@ -372,8 +380,8 @@ bool Game::checkForEmptySlots(int num, int dice)
 MoveCount Game::home_play(ChipColor color, int slotfrom){
     MoveCount ret = MoveCount::no_move;
     int num = 0;
-    if (color == ChipColor::white) num = 12;
-    else num = 24;
+    if (color == ChipColor::white) num = 24;
+    else num = 12;
     if(num - slotfrom == dice_1 || checkForEmptySlots(num, dice_1)){
         dice_1 = 0;
         ret = MoveCount::true_move;
