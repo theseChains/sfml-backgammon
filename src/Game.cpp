@@ -310,19 +310,15 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
         return;
     }
     MoveCount temp = MoveCount::no_move;
-    std::cout << "home: " << home_state << '\n';
     if(home_state && (slot_index_drop == 24 || slot_index_drop == 25)){
-        std::cout << "slot take id " << slot_index_take << '\n';
-        std::cout << "slot drop id " << slot_index_drop << '\n';
         temp = home_play(color, slot_index_take);
     }
     
-    std::cout << "temp: " << (temp == MoveCount::no_move ? "no move\n" : "true move\n");
-    if(temp == MoveCount::no_move && slot_index_drop != 24 && slot_index_drop != 25) temp = moveIsValid(slot_index_take, slot_index_drop, color);
-    std::cout << "temp: " << (temp == MoveCount::no_move ? "no move\n" : "true move\n");
+    if (temp == MoveCount::no_move && slot_index_drop != 24 && slot_index_drop != 25)
+        temp = moveIsValid(slot_index_take, slot_index_drop, color);
+
     if (temp != MoveCount::no_move)
     {
-        std::cout << "moving chip\n";
         slots[slot_index_drop].setChipColor(
             slots[slot_index_take].getChipColor());
         slots[slot_index_drop].incrementChipCount();
@@ -331,9 +327,10 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
         {
             slots[slot_index_take].setChipColor(ChipColor::jopa_timura);
         }
-        // ChangeHeight(slot_index_drop);
-        // ChangeHeight(slot_index_take);
-        moveChip();
+        if (home_state)
+            updateSlotChips(slots[slot_index_take], slot_index_take);
+        else
+            moveChip();
     }
 
     if (!dice_1 && !dice_2 && !dice_3 && !dice_4)
@@ -395,11 +392,11 @@ MoveCount Game::home_play(ChipColor color, int slotfrom){
         ret = MoveCount::true_move;
     }
     else if(dubl){
-        if(num - slotfrom == dice_1 * 3){
+        if(num - slotfrom == dice_1 * 3 || checkForEmptySlots(num, dice_1)){
             dice_1 = dice_2 = dice_3 = 0;
             ret = MoveCount::true_move;
         }
-        else if(num - slotfrom == dice_1 * 4){
+        else if(num - slotfrom == dice_1 * 4 || checkForEmptySlots(num, dice_1)){
              dice_1 = dice_2 = dice_3 = dice_4 = 0;
             ret = MoveCount::true_move;
         }
@@ -579,6 +576,26 @@ void Game::draw(sf::RenderWindow& window)
     for (auto& slot : slots)
     {
         slot.drawChips(window);
+    }
+
+    int numberOfChipsAtWhiteHome{ slots[constants::whiteAssemblySlotIndex].getChipsCount() };
+    int numberOfChipsAtBlackHome{ slots[constants::blackAssemblySlotIndex].getChipsCount() };
+    for (int i{ 0 }; i < numberOfChipsAtWhiteHome; ++i)
+    {
+        sf::RectangleShape whiteRectangle{
+            { constants::assemblySlotWidth, 30 } };
+        whiteRectangle.setFillColor(sf::Color::White);
+        whiteRectangle.setPosition({ 40.0f, 40.0f + i * 30 });
+        window.draw(whiteRectangle);
+    }
+
+    for (int i{ 0 }; i < numberOfChipsAtBlackHome; ++i)
+    {
+        sf::RectangleShape blackRectangle{
+            { constants::assemblySlotWidth, 30 } };
+        blackRectangle.setFillColor(sf::Color::Black);
+        blackRectangle.setPosition({ 1795.0f, 595.0f + i * 30 });
+        window.draw(blackRectangle);
     }
 
     drawBounds(window);
