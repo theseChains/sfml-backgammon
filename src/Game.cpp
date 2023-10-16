@@ -35,6 +35,9 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex,
 
     if (slotMovedFromIndex == slotMovedToIndex)
         return ret;
+    if(chipAtHome(color, slotMovedFromIndex) &&
+       !SecondRound(color, abs(slotMovedFromIndex - slotMovedToIndex), slotMovedFromIndex))
+        return ret;
     if (dubl && dice_1 == 0)
     {
         dice_1 = dice_3;
@@ -56,7 +59,7 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex,
     int no_head_problem = 0;
 
     bool six =
-        SexChips(slotMovedToIndex, slots[slotMovedFromIndex].getChipColor());
+        SexChips(slotMovedToIndex, slotMovedFromIndex, slots[slotMovedFromIndex].getChipColor());
 
     if (color == ChipColor::black)
         no_head_problem = !was_taken_from_head + abs(12 - slotMovedFromIndex);
@@ -138,7 +141,7 @@ void Game::chooseChip(const sf::Event& event, sf::RenderWindow& window, ChipColo
     }
 }
 
-bool Game::SexChips(int slotMovedToIndex, ChipColor col)
+bool Game::SexChips(int slotMovedToIndex, int slotMovedFromIndex, ChipColor col)
 {
     int n = 1;
     int count = 0;
@@ -146,7 +149,8 @@ bool Game::SexChips(int slotMovedToIndex, ChipColor col)
     {
         if (slots[(24 + slotMovedToIndex - n) % 24].getChipColor() != col)
             break;
-        count++;
+        if ((24 + slotMovedToIndex - n) % 24 != slotMovedFromIndex)
+            count++;
         n++;
     }
     n = 1;
@@ -154,7 +158,8 @@ bool Game::SexChips(int slotMovedToIndex, ChipColor col)
     {
         if (slots[(slotMovedToIndex + n) % 24].getChipColor() != col)
             break;
-        count++;
+        if ((slotMovedToIndex + n) % 24 != slotMovedFromIndex)
+            count++;
         n++;
     }
     bool has_chip_at_home = 0;
@@ -201,10 +206,17 @@ bool Game::CheckMoves(PlayerTurn & turn){
   for(; i < 24; i++){
     if(slots[i].getChipColor() == col){
       count++;
-      if((dice_1 != 0 && slots[(dice_1 + i) % 24].getChipColor() != oppoz_col) ||
+      if(((dice_1 != 0 && slots[(dice_1 + i) % 24].getChipColor() != oppoz_col) ||
         (dice_2 != 0 && slots[(dice_2 + i) % 24].getChipColor() != oppoz_col) ||
         (dice_3 != 0 && slots[(dice_3 + i) % 24].getChipColor() != oppoz_col) ||
-        (dice_4 != 0 && slots[(dice_4 + i) % 24].getChipColor() != oppoz_col)) res = 1;
+        (dice_4 != 0 && slots[(dice_4 + i) % 24].getChipColor() != oppoz_col)) && !chipAtHome(col, i)) {
+        res = 1;
+      }
+      else if (chipAtHome(col, i) &&
+              ((SecondRound(col, dice_1, i) && slots[(dice_1 + i) % 24].getChipColor() != oppoz_col) ||
+               (SecondRound(col, dice_2, i) && slots[(dice_2 + i) % 24].getChipColor() != oppoz_col))) {
+        res = 1;
+      }
     }
     if(count == 15) break;
   }
@@ -451,10 +463,11 @@ void Game::setDolbaeb(bool fl)
 
 void Game::StartPosition(const TextureHolder& textures)
 {
-    slots[12].setChipColor(ChipColor::black);
-    slots[12].setChipsCount(15);
     slots[0].setChipColor(ChipColor::white);
     slots[0].setChipsCount(15);
+    slots[12].setChipsCount(15);
+    slots[12].setChipColor(ChipColor::black);
+
     for (int i{ 0 }; i < constants::numberOfChips; ++i)
     {
         Chip whiteChip{ { 170.0f,
@@ -473,8 +486,6 @@ void Game::StartPosition(const TextureHolder& textures)
                         textures };
         slots[12].pushChip(blackChip);
     }
-    // ChangeHeight(0);
-    // ChangeHeight(12);
 }
 
 void Game::setDices()
@@ -494,7 +505,6 @@ void Game::setDices()
         dice_3 = dice_1;
         dice_4 = dice_1;
     }
-    if(slots[0].getChipsCount() == 15 && slots[12].getChipsCount() == 15) dice_1 = dice_2 = dice_3 = dice_4 = 6;
     m_diceThrowState = false;
     m_chipChooseState = true;
 }
@@ -569,6 +579,23 @@ void Game::setDiceThrowState(bool diceThrowState)
 void Game::setChipChooseState(bool chipChooseState)
 {
     m_chipChooseState = chipChooseState;
+}
+
+bool Game::SecondRound(ChipColor col, int dice, int index){
+    if(col == ChipColor::white && (index + dice) < 24) return true;
+    else if(col == ChipColor::black && (index + dice) < 12) return true;
+    return false;
+}
+
+bool Game::chipAtHome(ChipColor col, int index){
+    if (col == ChipColor::white)
+    {
+        if(index >= 18 && index < 24) return true;
+    }
+    else if(col == ChipColor::black){
+        if(index >= 6 && index < 12) return true;
+    }
+    return false;
 }
 
 void Game::draw(sf::RenderWindow& window)

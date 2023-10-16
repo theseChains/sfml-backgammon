@@ -31,7 +31,7 @@ public:
     void ChangeHeight(int slot_id);
     bool SlotsSameColor(int from_, int to_);
     void StartPosition(const TextureHolder& textures);
-    bool SexChips(int slotMovedToIndex, ChipColor col);
+    bool SexChips(int slotMovedToIndex, int slotMovedFromIndex, ChipColor col);
     bool CheckMoves(PlayerTurn & turn);
 
     bool isMoveState() const;
@@ -44,6 +44,8 @@ public:
     bool home(ChipColor col);
     void change_states();
     MoveCount home_play(ChipColor color, int slotfrom);
+    bool SecondRound(ChipColor col, int dice, int index);
+    bool chipAtHome(ChipColor col, int index);
     bool checkForEmptySlots(int num, int dice);
 
     void draw(sf::RenderWindow& window);
