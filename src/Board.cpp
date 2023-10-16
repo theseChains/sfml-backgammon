@@ -103,13 +103,13 @@ void Board::handleEvent(const sf::Event& event)
              m_game.isChipChooseState())
     {
         std::cout << "first player choosing chips\n";
-        m_game.chooseChip(event, m_window);
+        m_game.chooseChip(event, m_window, ChipColor::white);
     }
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
              m_game.isChipChooseState())
     {
         std::cout << "second player choosing chips\n";
-        m_game.chooseChip(event, m_window);
+        m_game.chooseChip(event, m_window, ChipColor::black);
     }
     else if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
              m_game.isMoveState())

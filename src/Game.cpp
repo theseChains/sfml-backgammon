@@ -127,11 +127,11 @@ bool Game::SlotsSameColor(int from_, int to_)
            slots[to_].getChipColor() == ChipColor::jopa_timura;
 }
 
-void Game::chooseChip(const sf::Event& event, sf::RenderWindow& window)
+void Game::chooseChip(const sf::Event& event, sf::RenderWindow& window, ChipColor color)
 {
     slot_index_take = GetSlotIndex(event, window);
     // should do a fix here i think 
-    if (slot_index_take != -1)
+    if (slot_index_take != -1 && slots[slot_index_take].getChipColor() == color)
     {
         m_chipChooseState = false;
         m_moveState = true;
@@ -451,10 +451,10 @@ void Game::setDolbaeb(bool fl)
 
 void Game::StartPosition(const TextureHolder& textures)
 {
-    slots[11].setChipColor(ChipColor::black);
-    slots[11].setChipsCount(15);
-    slots[23].setChipColor(ChipColor::white);
-    slots[23].setChipsCount(15);
+    slots[12].setChipColor(ChipColor::black);
+    slots[12].setChipsCount(15);
+    slots[0].setChipColor(ChipColor::white);
+    slots[0].setChipsCount(15);
     for (int i{ 0 }; i < constants::numberOfChips; ++i)
     {
         Chip whiteChip{ { 170.0f,
@@ -462,7 +462,7 @@ void Game::StartPosition(const TextureHolder& textures)
                                        constants::firstChipDistanceConstant },
                         ChipColor::white,
                         textures };
-        slots[23].pushChip(whiteChip);
+        slots[0].pushChip(whiteChip);
     }
     for (int i{ 0 }; i < constants::numberOfChips; ++i)
     {
@@ -471,7 +471,7 @@ void Game::StartPosition(const TextureHolder& textures)
                                       constants::firstChipDistanceConstant },
                         ChipColor::black,
                         textures };
-        slots[11].pushChip(blackChip);
+        slots[12].pushChip(blackChip);
     }
     // ChangeHeight(0);
     // ChangeHeight(12);
