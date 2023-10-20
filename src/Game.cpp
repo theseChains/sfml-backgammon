@@ -210,12 +210,25 @@ bool Game::CheckMoves(PlayerTurn & turn){
       }
       else if (chipAtHome(col, i) &&
               ((SecondRound(col, dice_1, i) && slots[(dice_1 + i) % 24].getChipColor() != oppoz_col && dice_1 != 0) ||
-               (SecondRound(col, dice_2, i) && slots[(dice_2 + i) % 24].getChipColor() != oppoz_col && dice_2 != 0 ))) {
+               (SecondRound(col, dice_2, i) && slots[(dice_2 + i) % 24].getChipColor() != oppoz_col && dice_2 != 0))) {
         res = 1;
       }
       count++;
     }
     if(count == 15) break;
+  }
+  for(int i = 0; i < )
+  if(col == ChipColor::white){
+      for(int i = 18; i < 24; i++){
+          if(home(col) && (dice_1 + i == 24 || checkForEmptySlots(24, dice_1) ||
+          dice_2 + i == 24 || checkForEmptySlots(24, dice_2))) res = 1;
+      }
+  }
+  else{
+      for(int i = 6; i < 12; i++){
+          if(home(col) && (dice_1 + i == 25 || checkForEmptySlots(12, dice_1) ||
+          dice_2 + i == 25 || checkForEmptySlots(12, dice_2))) res = 1;
+      }
   }
   if(!res){
     change_states();
@@ -375,7 +388,7 @@ bool Game::checkForEmptySlots(int num, int dice)
             ++countOfEmpty;
     }
     std::cout << "count of empty: " << countOfEmpty << '\n';
-    if (countOfEmpty == 7 - dice)
+    if (countOfEmpty >= 7 - dice)
         flag = true;
 
     std::cout << "check for empty flag: " << flag << '\n';
