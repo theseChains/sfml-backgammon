@@ -179,7 +179,6 @@ bool Game::SexChips(int slotMovedToIndex, int slotMovedFromIndex, ChipColor col)
                 has_chip_at_home = 1;
         }
     }
-    std::cout << "count = " << count << "homie_chip = " << has_chip_at_home;
     if (count >= 5 && !has_chip_at_home)
         return 0;
     else
@@ -194,29 +193,27 @@ bool Game::CheckMoves(PlayerTurn & turn){
   bool res = 0;
   ChipColor col;
   if (turn == PlayerTurn::firstPlayerTurn)
-        col = ChipColor::white;
-    else
-        col = ChipColor::black;
+    col = ChipColor::white;
+  else
+    col = ChipColor::black;
 
   if(col == ChipColor::black) oppoz_col = ChipColor::white;
   else oppoz_col = ChipColor::black;
-  int i;
-  if (was_taken_from_head) i = 1;
-  else i = 0;
-  for(; i < 24; i++){
+  for(int i = 0; i < 24; i++){
     if(slots[i].getChipColor() == col){
-      count++;
-      if(((dice_1 != 0 && slots[(dice_1 + i) % 24].getChipColor() != oppoz_col) ||
+      if(was_taken_from_head && (col == ChipColor::black && i == 12 || col == ChipColor::white && i == 0)) continue;
+      else if(((dice_1 != 0 && slots[(dice_1 + i) % 24].getChipColor() != oppoz_col) ||
         (dice_2 != 0 && slots[(dice_2 + i) % 24].getChipColor() != oppoz_col) ||
         (dice_3 != 0 && slots[(dice_3 + i) % 24].getChipColor() != oppoz_col) ||
         (dice_4 != 0 && slots[(dice_4 + i) % 24].getChipColor() != oppoz_col)) && !chipAtHome(col, i)) {
         res = 1;
       }
       else if (chipAtHome(col, i) &&
-              ((SecondRound(col, dice_1, i) && slots[(dice_1 + i) % 24].getChipColor() != oppoz_col) ||
-               (SecondRound(col, dice_2, i) && slots[(dice_2 + i) % 24].getChipColor() != oppoz_col))) {
+              ((SecondRound(col, dice_1, i) && slots[(dice_1 + i) % 24].getChipColor() != oppoz_col && dice_1 != 0) ||
+               (SecondRound(col, dice_2, i) && slots[(dice_2 + i) % 24].getChipColor() != oppoz_col && dice_2 != 0 ))) {
         res = 1;
       }
+      count++;
     }
     if(count == 15) break;
   }
