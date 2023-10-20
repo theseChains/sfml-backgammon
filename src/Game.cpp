@@ -50,8 +50,8 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex,
         dice_4 = 0;
     }
 
-    int slot_dice_1 = slotMovedToIndex - dice_1;
-    int slot_dice_2 = slotMovedToIndex - dice_2;
+    int slot_dice_1 = (24 + slotMovedToIndex - dice_1) % 24;
+    int slot_dice_2 = (24 + slotMovedToIndex - dice_2) % 24;
 
     int slot_temp_3 = slotMovedToIndex - 2 * dice_1;  // for ebanni dubl
     int slot_temp_4 = slotMovedToIndex - 3 * dice_1;  // for ebanni dubl
@@ -147,36 +147,49 @@ bool Game::SexChips(int slotMovedToIndex, int slotMovedFromIndex, ChipColor col)
     int count = 0;
     while (true)
     {
-        if (slots[(24 + slotMovedToIndex - n) % 24].getChipColor() != col)
+        if (slots[(24 + slotMovedToIndex - n) % 24].getChipColor() != col ||
+            (col == ChipColor::black && (24 + slotMovedToIndex - n) % 24 == 23) ||
+            (col == ChipColor::white && (24 + slotMovedToIndex - n) % 24 == 11))
             break;
-        if ((24 + slotMovedToIndex - n) % 24 != slotMovedFromIndex)
+        if ((24 + slotMovedToIndex - n) % 24 != slotMovedFromIndex ||
+           ((24 + slotMovedToIndex - n) % 24 == slotMovedFromIndex &&
+            slots[slotMovedFromIndex].getChipsCount() > 1))
             count++;
         n++;
     }
     n = 1;
     while (true)
     {
-        if (slots[(slotMovedToIndex + n) % 24].getChipColor() != col)
+        if (slots[(slotMovedToIndex + n) % 24].getChipColor() != col ||
+            (col == ChipColor::black && (slotMovedToIndex + n) % 24 == 0) ||
+            (col == ChipColor::white && (slotMovedToIndex + n) % 24 == 12))
             break;
-        if ((slotMovedToIndex + n) % 24 != slotMovedFromIndex)
+        if ((slotMovedToIndex + n) % 24 != slotMovedFromIndex ||
+           ((slotMovedToIndex + n) % 24 == slotMovedFromIndex &&
+            slots[slotMovedFromIndex].getChipsCount() > 1))
             count++;
         n++;
     }
+
     bool has_chip_at_home = 0;
     if (col == ChipColor::black)
     {
         for (int i = 18; i <= 23; i++)
         {
-            if (slots[i].getChipColor() == ChipColor::white)
+            if (slots[i].getChipColor() == ChipColor::white) {
                 has_chip_at_home = 1;
+                break;
+            }
         }
     }
     else
     {
         for (int i = 6; i <= 11; i++)
         {
-            if (slots[i].getChipColor() == ChipColor::black)
+            if (slots[i].getChipColor() == ChipColor::black) {
                 has_chip_at_home = 1;
+                break;
+            }
         }
     }
     if (count >= 5 && !has_chip_at_home)
@@ -210,14 +223,16 @@ bool Game::CheckMoves(PlayerTurn & turn){
       }
       else if (chipAtHome(col, i) &&
               ((SecondRound(col, dice_1, i) && slots[(dice_1 + i) % 24].getChipColor() != oppoz_col && dice_1 != 0) ||
-               (SecondRound(col, dice_2, i) && slots[(dice_2 + i) % 24].getChipColor() != oppoz_col && dice_2 != 0))) {
+               (SecondRound(col, dice_2, i) && slots[(dice_2 + i) % 24].getChipColor() != oppoz_col && dice_2 != 0) ||
+               (SecondRound(col, dice_3, i) && slots[(dice_3 + i) % 24].getChipColor() != oppoz_col && dice_3 != 0) ||
+               (SecondRound(col, dice_4, i) && slots[(dice_4 + i) % 24].getChipColor() != oppoz_col && dice_4 != 0))) {
         res = 1;
       }
       count++;
     }
     if(count == 15) break;
   }
-  for(int i = 0; i < )
+
   if(col == ChipColor::white){
       for(int i = 18; i < 24; i++){
           if(home(col) && (dice_1 + i == 24 || checkForEmptySlots(24, dice_1) ||
