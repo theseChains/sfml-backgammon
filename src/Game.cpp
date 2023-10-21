@@ -226,6 +226,12 @@ bool Game::CheckMoves(PlayerTurn & turn){
                (SecondRound(col, dice_2, i) && slots[(dice_2 + i) % 24].getChipColor() != oppoz_col && dice_2 != 0) ||
                (SecondRound(col, dice_3, i) && slots[(dice_3 + i) % 24].getChipColor() != oppoz_col && dice_3 != 0) ||
                (SecondRound(col, dice_4, i) && slots[(dice_4 + i) % 24].getChipColor() != oppoz_col && dice_4 != 0))) {
+          std::cout << "chip at home: res = 1, i = " << i << '\n';
+          std::cout << "dice 1, 2, 3, 4: " << dice_1 <<  ' ' << dice_2 << ' ' << dice_3 << ' ' << dice_4 << '\n';
+          std::cout << "second round dice 1: " << SecondRound(col, dice_1, i) << '\n';
+          std::cout << "second round dice 2: " << SecondRound(col, dice_2, i) << '\n';
+          std::cout << "second round dice 3: " << SecondRound(col, dice_3, i) << '\n';
+          std::cout << "second round dice 4: " << SecondRound(col, dice_4, i) << '\n';
         res = 1;
       }
       count++;
@@ -236,13 +242,21 @@ bool Game::CheckMoves(PlayerTurn & turn){
   if(col == ChipColor::white){
       for(int i = 18; i < 24; i++){
           if(home(col) && (dice_1 + i == 24 || checkForEmptySlots(24, dice_1) ||
-          dice_2 + i == 24 || checkForEmptySlots(24, dice_2))) res = 1;
+          dice_2 + i == 24 || checkForEmptySlots(24, dice_2)))
+          {
+              std::cout << "res 1 for white at home\n";
+              res = 1;
+          }
       }
   }
   else{
       for(int i = 6; i < 12; i++){
           if(home(col) && (dice_1 + i == 25 || checkForEmptySlots(12, dice_1) ||
-          dice_2 + i == 25 || checkForEmptySlots(12, dice_2))) res = 1;
+          dice_2 + i == 25 || checkForEmptySlots(12, dice_2))) 
+          {
+              std::cout << "res 1 for black at home\n";
+              res = 1;
+          }
       }
   }
   if(!res){
@@ -354,6 +368,11 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
     if (temp == MoveCount::no_move && slot_index_drop != 24 && slot_index_drop != 25)
         temp = moveIsValid(slot_index_take, slot_index_drop, color);
 
+    if (temp == MoveCount::no_move) {
+        m_chipChooseState = true;
+        m_moveState = false;
+        return;
+    }
     if (temp != MoveCount::no_move)
     {
         slots[slot_index_drop].setChipColor(
@@ -365,7 +384,11 @@ void Game::handleChipMovement(const sf::Event& event, sf::RenderWindow& window,
             slots[slot_index_take].setChipColor(ChipColor::jopa_timura);
         }
         if (home_state)
+        {
             updateSlotChips(slots[slot_index_take], slot_index_take);
+            if (slot_index_drop < 24)
+                moveChip();
+        }
         else
             moveChip();
     }

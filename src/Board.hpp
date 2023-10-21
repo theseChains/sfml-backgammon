@@ -26,12 +26,14 @@ private:
     Button m_secondPlayerButton;
     sf::Sprite m_sprite;
     TextureHolder& m_textures;
+    sf::Text m_noMovesText;
 
     PlayerTurn m_playerTurn;
     Game m_game;
 
     std::pair<sf::Sprite, sf::Sprite> m_playerDices;
     bool m_showDices;
+    bool m_showNoMovesText;
 };
 
 #endif

@@ -54,11 +54,14 @@ Board::Board(sf::Font& font, TextureHolder& textures, sf::RenderWindow& window)
       m_secondPlayerButton{ initializeSecondPlayerButton(font) },
       m_sprite{ textures.get(Textures::ID::board) },
       m_textures{ textures },
+      m_noMovesText{ "no available moves", font },
       m_playerTurn{ PlayerTurn::firstPlayerTurn },
       m_game{ textures },
       m_playerDices{ initializePlayerDices(textures) },
-      m_showDices{ false }
+      m_showDices{ false },
+      m_showNoMovesText{ false }
 {
+    m_noMovesText.setCharacterSize(15);
 }
 
 void Board::handleEvent(const sf::Event& event)
@@ -68,6 +71,9 @@ void Board::handleEvent(const sf::Event& event)
     if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
         m_game.isDiceThrowState())
     {
+        if (m_showNoMovesText)
+            m_showNoMovesText = false;
+
         std::cout << "first player throwing\n";
         m_game.setDolbaeb(false);
         if (m_firstPlayerButton.isClicked(event, m_window))
@@ -81,10 +87,16 @@ void Board::handleEvent(const sf::Event& event)
             m_playerDices.second.setTexture(
                     m_textures.get(constants::textureMap[secondDice]));
         }
+
+        if (!m_game.CheckMoves(m_playerTurn))
+            m_showNoMovesText = true;
     }
     else if (m_playerTurn == PlayerTurn::secondPlayerTurn &&
              m_game.isDiceThrowState())
     {
+        if (m_showNoMovesText)
+            m_showNoMovesText = false;
+
         std::cout << "second player throwing\n";
         m_game.setDolbaeb(true);
         if (m_secondPlayerButton.isClicked(event, m_window))
@@ -98,6 +110,9 @@ void Board::handleEvent(const sf::Event& event)
             m_playerDices.second.setTexture(
                     m_textures.get(constants::textureMap[secondDice]));
         }
+
+        if (!m_game.CheckMoves(m_playerTurn))
+            m_showNoMovesText = true;
     }
     else if (m_playerTurn == PlayerTurn::firstPlayerTurn &&
              m_game.isChipChooseState())
@@ -140,6 +155,10 @@ void Board::draw()
     {
         m_window.draw(m_playerDices.first);
         m_window.draw(m_playerDices.second);
+    }
+    if (m_showNoMovesText)
+    {
+        m_window.draw(m_noMovesText);
     }
     m_game.draw(m_window);
 }
