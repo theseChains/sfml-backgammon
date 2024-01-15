@@ -13,10 +13,6 @@ int Game::GetSlotIndex(const sf::Event& event, sf::RenderWindow& window)
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
     for (int i = 0; i < constants::numberOfSlots + 2; ++i)
     {
-        // std::cout << "slot x, w, y, h: " << slots[i].getXLeft() << ' ' <<
-        // constants::SlotWidth + slots[i].getXLeft() << ' ' <<
-        // slots[i].getYTop() << ' ' << constants::SlotHeight +
-        // slots[i].getYTop() << '\n';
         if (slots[i].getBounds().contains(
                 static_cast<sf::Vector2f>(mousePosition)) &&
             event.type == sf::Event::MouseButtonPressed &&
@@ -35,7 +31,7 @@ MoveCount Game::moveIsValid(int slotMovedFromIndex, int slotMovedToIndex,
 
     if (slotMovedFromIndex == slotMovedToIndex)
         return ret;
-    if(chipAtHome(color, slotMovedFromIndex) &&
+    if (chipAtHome(color, slotMovedFromIndex) &&
        !SecondRound(color, abs(slotMovedFromIndex - slotMovedToIndex), slotMovedFromIndex))
         return ret;
     if (dubl && dice_1 == 0)
@@ -226,12 +222,12 @@ bool Game::CheckMoves(PlayerTurn & turn){
                (SecondRound(col, dice_2, i) && slots[(dice_2 + i) % 24].getChipColor() != oppoz_col && dice_2 != 0) ||
                (SecondRound(col, dice_3, i) && slots[(dice_3 + i) % 24].getChipColor() != oppoz_col && dice_3 != 0) ||
                (SecondRound(col, dice_4, i) && slots[(dice_4 + i) % 24].getChipColor() != oppoz_col && dice_4 != 0))) {
-          std::cout << "chip at home: res = 1, i = " << i << '\n';
-          std::cout << "dice 1, 2, 3, 4: " << dice_1 <<  ' ' << dice_2 << ' ' << dice_3 << ' ' << dice_4 << '\n';
-          std::cout << "second round dice 1: " << SecondRound(col, dice_1, i) << '\n';
-          std::cout << "second round dice 2: " << SecondRound(col, dice_2, i) << '\n';
-          std::cout << "second round dice 3: " << SecondRound(col, dice_3, i) << '\n';
-          std::cout << "second round dice 4: " << SecondRound(col, dice_4, i) << '\n';
+          /* std::cout << "chip at home: res = 1, i = " << i << '\n'; */
+          /* std::cout << "dice 1, 2, 3, 4: " << dice_1 <<  ' ' << dice_2 << ' ' << dice_3 << ' ' << dice_4 << '\n'; */
+          /* std::cout << "second round dice 1: " << SecondRound(col, dice_1, i) << '\n'; */
+          /* std::cout << "second round dice 2: " << SecondRound(col, dice_2, i) << '\n'; */
+          /* std::cout << "second round dice 3: " << SecondRound(col, dice_3, i) << '\n'; */
+          /* std::cout << "second round dice 4: " << SecondRound(col, dice_4, i) << '\n'; */
         res = 1;
       }
       count++;
@@ -239,10 +235,17 @@ bool Game::CheckMoves(PlayerTurn & turn){
     if(count == 15) break;
   }
 
-  if(col == ChipColor::white){
-      for(int i = 18; i < 24; i++){
-          if(home(col) && (dice_1 + i == 24 || checkForEmptySlots(24, dice_1) ||
-          dice_2 + i == 24 || checkForEmptySlots(24, dice_2)))
+  if (col == ChipColor::white)
+  {
+      for (int i = 18; i < 24; i++)
+      {
+          std::cerr << std::boolalpha << "home(col): " << home(col) << '\n';
+          std::cerr << "dice_1 + i == 24: " << (dice_1 + i == 24) << '\n';
+          std::cerr << "checkForEmptySlots(24, dice_1): " << checkForEmptySlots(24, dice_1) << '\n';
+          std::cerr << "dice_2 + i == 24: " << (dice_2 + i == 24) << '\n';
+          std::cerr << "checkForEmptySlots(24, dice_2): " << checkForEmptySlots(24, dice_2) << '\n';
+          if (home(col) && (dice_1 + i == 24 || checkForEmptySlots(24, dice_1) ||
+              dice_2 + i == 24 || checkForEmptySlots(24, dice_2)))
           {
               std::cout << "res 1 for white at home\n";
               res = 1;
@@ -421,15 +424,15 @@ bool Game::checkForEmptySlots(int num, int dice)
     int countOfEmpty = 0;
     for (int i{ num - 6 }; i <= num - dice; ++i)
     {
-        std::cout << "slot index: " << i << '\n';
+        /* std::cout << "slot index: " << i << '\n'; */
         if (slots[i].getChipColor() == ChipColor::jopa_timura)
             ++countOfEmpty;
     }
-    std::cout << "count of empty: " << countOfEmpty << '\n';
+    /* std::cout << "count of empty: " << countOfEmpty << '\n'; */
     if (countOfEmpty >= 7 - dice)
         flag = true;
 
-    std::cout << "check for empty flag: " << flag << '\n';
+    /* std::cout << "check for empty flag: " << flag << '\n'; */
 
     return flag;
 }
@@ -515,8 +518,29 @@ void Game::StartPosition(const TextureHolder& textures)
     slots[0].setChipsCount(15);
     slots[12].setChipsCount(15);
     slots[12].setChipColor(ChipColor::black);
+    /* slots[18].setChipColor(ChipColor::white); */
+    /* slots[18].setChipsCount(15); */
+    /* slots[19].setChipsCount(1); */
+    /* slots[19].setChipColor(ChipColor::black); */
+    /* slots[20].setChipsCount(1); */
+    /* slots[20].setChipColor(ChipColor::black); */
+    /* slots[21].setChipsCount(1); */
+    /* slots[21].setChipColor(ChipColor::black); */
+    /* slots[22].setChipsCount(1); */
+    /* slots[22].setChipColor(ChipColor::black); */
+    /* slots[6].setChipsCount(11); */
+    /* slots[6].setChipColor(ChipColor::black); */
 
-    for (int i{ 0 }; i < constants::numberOfChips; ++i)
+    /* slots[7].setChipsCount(1); */
+    /* slots[7].setChipColor(ChipColor::white); */
+    /* slots[8].setChipsCount(1); */
+    /* slots[8].setChipColor(ChipColor::white); */
+    /* slots[9].setChipsCount(1); */
+    /* slots[9].setChipColor(ChipColor::white); */
+    /* slots[10].setChipsCount(1); */
+    /* slots[10].setChipColor(ChipColor::white); */
+
+    for (int i{ 0 }; i < 15; ++i)
     {
         Chip whiteChip{ { 170.0f,
                           920.0f - static_cast<float>(i) * constants::ChipDiam /
@@ -525,7 +549,29 @@ void Game::StartPosition(const TextureHolder& textures)
                         textures };
         slots[0].pushChip(whiteChip);
     }
-    for (int i{ 0 }; i < constants::numberOfChips; ++i)
+
+    // remove later
+    /* Chip blackChip{ { 170.0f, */
+    /*     920.0f - static_cast<float>(0) * constants::ChipDiam / */
+    /*         constants::firstChipDistanceConstant }, */
+    /*      ChipColor::black, */
+    /*      textures }; */
+    /* slots[19].pushChip(blackChip); */
+    /* slots[20].pushChip(blackChip); */
+    /* slots[21].pushChip(blackChip); */
+    /* slots[22].pushChip(blackChip); */
+
+    /* Chip whiteChip{ { 170.0f, */
+    /*     920.0f - static_cast<float>(0) * constants::ChipDiam / */
+    /*         constants::firstChipDistanceConstant }, */
+    /*      ChipColor::white, */
+    /*      textures }; */
+    /* slots[8].pushChip(whiteChip); */
+    /* slots[9].pushChip(whiteChip); */
+    /* slots[10].pushChip(whiteChip); */
+    /* slots[11].pushChip(whiteChip); */
+
+    for (int i{ 0 }; i < 15; ++i)
     {
         Chip blackChip{ { 1620.0f,
                           30.0f + static_cast<float>(i) * constants::ChipDiam /
